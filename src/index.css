@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #ff9900; /* EVA Amber/Orange */
+  --color-primary-dark: #cc7a00;
+  --color-bg-dark: #050300; /* Very dark warm black */
+  --color-bg-card: #140a00; /* Dark amber-tinted black */
+  --color-text: #ffb347; /* Lighter amber */
+  --color-text-muted: #b36b00; /* Darker amber */
+  --color-accent-green: #ff9900; /* Replaced with amber */
+  --color-accent-cyan: #ff3300; /* Red alert for contrast */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'VT323', 'Share Tech Mono', 'Courier New', monospace;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CRT Scanline Effect */
+.crt::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* CRT Flicker Effect */
+.crt::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 50;
+  pointer-events: none;
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.02; }
+  50% { opacity: 0.05; }
+  100% { opacity: 0.02; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+/* Retro Button Styles */
+.retro-btn {
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  text-shadow: 0 0 5px var(--color-primary);
+  box-shadow: inset 0 0 10px rgba(255, 153, 0, 0.2), 0 0 10px rgba(255, 153, 0, 0.2);
+  transition: all 0.2s;
+}
+
+.retro-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-bg-dark);
+  box-shadow: 0 0 20px var(--color-primary);
+}
+
+.retro-btn:disabled {
+  border-color: var(--color-text-muted);
+  color: var(--color-text-muted);
+  box-shadow: none;
+  text-shadow: none;
+}
+
+/* Retro Card Styles */
+.retro-card {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 0 15px rgba(255, 153, 0, 0.1);
+  position: relative;
+}
+
+.retro-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  box-shadow: inset 0 0 20px rgba(255, 153, 0, 0.05);
+  pointer-events: none;
+}
+
+/* Glowing Text */
+.glow-text {
+  text-shadow: 0 0 8px var(--color-primary);
+}
+
+.glow-text-cyan {
+  color: var(--color-accent-cyan);
+  text-shadow: 0 0 8px var(--color-accent-cyan);
+}
