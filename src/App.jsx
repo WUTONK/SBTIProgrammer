@@ -3,6 +3,8 @@ import Home from './components/Home.jsx'
 import Quiz from './components/Quiz.jsx'
 import LoadingScreen from './components/LoadingScreen.jsx'
 import Result from './components/Result.jsx'
+import DeveloperMode from './components/DeveloperMode.jsx'
+import { archetypes } from './data/archetypes.js'
 
 const SCREENS = {
   HOME: 'home',
@@ -15,10 +17,12 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState(SCREENS.HOME)
   const [answers, setAnswers] = useState([])
   const [result, setResult] = useState(null)
+  const [quizIndex, setQuizIndex] = useState(0)
 
   const handleStart = useCallback(() => {
     setAnswers([])
     setResult(null)
+    setQuizIndex(0)
     setCurrentScreen(SCREENS.QUIZ)
   }, [])
 
@@ -35,7 +39,22 @@ export default function App() {
   const handleRestart = useCallback(() => {
     setAnswers([])
     setResult(null)
+    setQuizIndex(0)
     setCurrentScreen(SCREENS.HOME)
+  }, [])
+
+  const handleJumpToQuestion = useCallback((index) => {
+    setAnswers(answers.slice(0, index))
+    setQuizIndex(index)
+    setCurrentScreen(SCREENS.QUIZ)
+  }, [answers])
+
+  const handlePreviewResult = useCallback((resultType) => {
+    setResult({
+      typeCode: resultType,
+      ...archetypes[resultType]
+    })
+    setCurrentScreen(SCREENS.RESULT)
   }, [])
 
   const renderScreen = () => {
@@ -43,7 +62,15 @@ export default function App() {
       case SCREENS.HOME:
         return <Home onStart={handleStart} />
       case SCREENS.QUIZ:
-        return <Quiz onComplete={handleCompleteQuiz} />
+        return (
+          <Quiz
+            onComplete={handleCompleteQuiz}
+            currentIndex={quizIndex}
+            setCurrentIndex={setQuizIndex}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        )
       case SCREENS.LOADING:
         return <LoadingScreen answers={answers} onComplete={handleLoadingComplete} />
       case SCREENS.RESULT:
@@ -64,6 +91,11 @@ export default function App() {
       <div className="relative z-10 flex-1 flex flex-col">
         {renderScreen()}
       </div>
+
+      <DeveloperMode 
+        onJumpToQuestion={handleJumpToQuestion}
+        onPreviewResult={handlePreviewResult}
+      />
     </div>
   )
 }

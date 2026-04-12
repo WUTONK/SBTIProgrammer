@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import { questions } from '../data/questions.js'
 
-export default function Quiz({ onComplete }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [answers, setAnswers] = useState([])
+export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answers, setAnswers }) {
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   const currentQuestion = questions[currentIndex]
