@@ -13,11 +13,14 @@ const SCREENS = {
   RESULT: 'result',
 }
 
+import { calculateResult } from './utils/calculateResult.js'
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState(SCREENS.HOME)
   const [answers, setAnswers] = useState([])
   const [result, setResult] = useState(null)
   const [quizIndex, setQuizIndex] = useState(0)
+  const [skipLoading, setSkipLoading] = useState(false)
 
   const handleStart = useCallback(() => {
     setAnswers([])
@@ -28,8 +31,14 @@ export default function App() {
 
   const handleCompleteQuiz = useCallback((allAnswers) => {
     setAnswers(allAnswers)
-    setCurrentScreen(SCREENS.LOADING)
-  }, [])
+    if (skipLoading) {
+      const finalResult = calculateResult(allAnswers)
+      setResult(finalResult)
+      setCurrentScreen(SCREENS.RESULT)
+    } else {
+      setCurrentScreen(SCREENS.LOADING)
+    }
+  }, [skipLoading])
 
   const handleLoadingComplete = useCallback((finalResult) => {
     setResult(finalResult)
@@ -52,7 +61,13 @@ export default function App() {
   const handlePreviewResult = useCallback((resultType) => {
     setResult({
       typeCode: resultType,
-      ...archetypes[resultType]
+      ...archetypes[resultType],
+      subDimensions: {
+        CO1: 'H', CO2: 'M', CO3: 'L',
+        SI1: 'H', SI2: 'H', SI3: 'M',
+        TP1: 'L', TP2: 'M', TP3: 'H',
+        PR1: 'H', PR2: 'L', PR3: 'M'
+      }
     })
     setCurrentScreen(SCREENS.RESULT)
   }, [])
@@ -81,20 +96,22 @@ export default function App() {
   }
 
   return (
-    <div className="crt min-h-screen bg-[var(--color-bg-dark)] flex flex-col relative overflow-hidden">
+    <div className="crt h-[100dvh] w-full bg-[var(--color-bg-dark)] flex flex-col relative overflow-hidden">
       {/* Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none z-50 mix-blend-overlay opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')]"></div>
       
       {/* Vignette effect */}
       <div className="absolute inset-0 pointer-events-none z-40 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.95)_100%)]"></div>
 
-      <div className="relative z-10 flex-1 flex flex-col">
+      <div className="relative z-10 flex-1 flex flex-col h-full overflow-y-auto">
         {renderScreen()}
       </div>
 
       <DeveloperMode 
         onJumpToQuestion={handleJumpToQuestion}
         onPreviewResult={handlePreviewResult}
+        skipLoading={skipLoading}
+        setSkipLoading={setSkipLoading}
       />
     </div>
   )

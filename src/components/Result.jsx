@@ -15,7 +15,13 @@ export default function Result({ result, onRestart }) {
   const displayResult = debugIndex >= 0 
     ? {
         typeCode: typeKeys[debugIndex],
-        ...archetypes[typeKeys[debugIndex]]
+        ...archetypes[typeKeys[debugIndex]],
+        subDimensions: {
+          CO1: 'H', CO2: 'M', CO3: 'L',
+          SI1: 'H', SI2: 'H', SI3: 'M',
+          TP1: 'L', TP2: 'M', TP3: 'H',
+          PR1: 'H', PR2: 'L', PR3: 'M'
+        }
       }
     : result
 
@@ -56,7 +62,7 @@ export default function Result({ result, onRestart }) {
   if (!displayResult) return null
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-4 space-y-8 relative">
+    <div className="flex-1 flex flex-col items-center justify-start p-4 py-8 space-y-6 relative w-full min-h-full">
       {/* 开发者调试按钮 */}
       <button 
         onClick={cycleDebug}
@@ -72,6 +78,7 @@ export default function Result({ result, onRestart }) {
           code={displayResult.typeCode} 
           title={displayResult.name || displayResult.typeName} 
           description={displayResult.description} 
+          subDimensions={displayResult.subDimensions}
         />
       </div>
 

@@ -1,4 +1,5 @@
 import { archetypes } from '../data/archetypes.js'
+import { questions } from '../data/questions.js'
 
 export function calculateResult(answers) {
   const rawScores = answers.map((answer) => answer.score)
@@ -44,6 +45,35 @@ export function calculateResult(answers) {
     },
   ]
 
+  // Calculate sub-dimension scores
+  const subDimensionScores = {
+    CO1: { sum: 0, count: 0 }, CO2: { sum: 0, count: 0 }, CO3: { sum: 0, count: 0 },
+    SI1: { sum: 0, count: 0 }, SI2: { sum: 0, count: 0 }, SI3: { sum: 0, count: 0 },
+    TP1: { sum: 0, count: 0 }, TP2: { sum: 0, count: 0 }, TP3: { sum: 0, count: 0 },
+    PR1: { sum: 0, count: 0 }, PR2: { sum: 0, count: 0 }, PR3: { sum: 0, count: 0 },
+  }
+  
+  answers.forEach((answer, index) => {
+    const q = questions[index]
+    if (q && q.subDimension) {
+      subDimensionScores[q.subDimension].sum += answer.score
+      subDimensionScores[q.subDimension].count += 1
+    }
+  })
+
+  const getLevel = (sum, count) => {
+    if (count === 0) return 'M' // 如果没有答相关题目（例如跳过），默认判定为中立
+    const avg = sum / count
+    if (avg > 0.3) return 'H'
+    if (avg < -0.3) return 'L'
+    return 'M'
+  }
+
+  const subDimensions = {}
+  for (const [key, data] of Object.entries(subDimensionScores)) {
+    subDimensions[key] = getLevel(data.sum, data.count)
+  }
+
   const typeInfo = archetypes[typeCode] || {
     role: '未知原型',
     name: '神秘程序员',
@@ -58,6 +88,7 @@ export function calculateResult(answers) {
     description: typeInfo.description,
     tags: typeInfo.tags,
     dimensionScores,
+    subDimensions,
     rawScores: { scoreCO, scoreSI, scoreTP, scorePR },
   }
 }

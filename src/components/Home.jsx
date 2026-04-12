@@ -1,6 +1,11 @@
+import { useState } from 'react';
+import { archetypes } from '../data/archetypes.js';
+
 export default function Home({ onStart }) {
+  const [showGallery, setShowGallery] = useState(false);
+
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 relative">
       <div className="max-w-lg w-full text-center animate-fade-in flex flex-col gap-12">
         
         <div className="retro-card rounded-none p-6 md:p-8 text-left relative">
@@ -13,7 +18,7 @@ export default function Home({ onStart }) {
           
           <div className="mb-8">
             <p className="text-[var(--color-primary)] text-sm mb-4">
-              C:\{'>'} RUN PROGRAMMER_SBTI.EXE
+              C:\&gt; RUN PROGRAMMER_SBTI.EXE
             </p>
             <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-primary)] mb-4 glow-text uppercase tracking-widest leading-tight">
               Programmer<br/>SBTI
@@ -25,16 +30,16 @@ export default function Home({ onStart }) {
 
           <div className="border-t border-[var(--color-primary)]/30 pt-6">
             <p className="text-[var(--color-primary)] text-base leading-relaxed">
-              {'>'} INITIALIZING SYSTEM... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
-              {'>'} LOADING PERSONALITY MODULES... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
-              {'>'} READY TO ANALYZE PROGRAMMING HABITS.<br/>
+              &gt; INITIALIZING SYSTEM... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
+              &gt; LOADING PERSONALITY MODULES... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
+              &gt; READY TO ANALYZE PROGRAMMING HABITS.<br/>
               <br/>
               DISCOVER YOUR UNIQUE <span className="glow-text-cyan font-bold">DEVELOPER ARCHETYPE</span> IN 2 MINUTES.
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-8">
+        <div className="flex flex-col items-center gap-6">
           <div className="flex flex-wrap justify-center gap-4 w-full">
             {['SYS.FAST', '16_TYPES', 'SHAREABLE'].map((tag) => (
               <span
@@ -50,15 +55,60 @@ export default function Home({ onStart }) {
             onClick={onStart}
             className="retro-btn w-full max-w-xs font-bold py-5 px-8 text-xl uppercase tracking-widest cursor-pointer"
           >
-            <span className="">{'>'} START_TEST</span>
+            <span className="">&gt; START_TEST</span>
             <span className="ml-2 animate-blink">_</span>
           </button>
 
-          <p className="text-[var(--color-text-muted)] text-xs">
+          <button
+            onClick={() => setShowGallery(true)}
+            className="text-[var(--color-primary)] border border-[var(--color-primary)]/50 hover:bg-[var(--color-primary)]/10 hover:border-[var(--color-primary)] transition-all w-full max-w-xs py-3 px-8 text-sm uppercase tracking-widest cursor-pointer"
+          >
+            [ 人格图鉴 GALLERY ]
+          </button>
+
+          <p className="text-[var(--color-text-muted)] text-xs mt-2">
             V1.0.0 | PURE FRONTEND | NO TRACKING
           </p>
         </div>
       </div>
+
+      {/* Gallery Modal */}
+      {showGallery && (
+        <div className="fixed inset-0 z-50 bg-[var(--color-bg-dark)]/95 backdrop-blur-sm flex flex-col p-4 md:p-8 overflow-hidden">
+          <div className="flex justify-between items-center mb-6 border-b border-[var(--color-primary)] pb-4 max-w-6xl mx-auto w-full">
+            <h2 className="text-2xl font-bold text-[var(--color-primary)] glow-text">
+              [ 人格图鉴 GALLERY ]
+            </h2>
+            <button
+              onClick={() => setShowGallery(false)}
+              className="text-[var(--color-primary)] hover:text-[var(--color-accent-red)] text-xl cursor-pointer font-bold"
+            >
+              [X] CLOSE
+            </button>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar max-w-6xl mx-auto w-full">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-8">
+              {Object.entries(archetypes).map(([key, data]) => (
+                <div 
+                  key={key} 
+                  className="retro-card aspect-square flex flex-col items-center justify-center p-4 text-center hover:scale-105 transition-transform cursor-default group"
+                >
+                  <div className="text-3xl font-bold text-[var(--color-primary)] mb-2 group-hover:glow-text">
+                    {key}
+                  </div>
+                  <div className="text-[var(--color-accent-cyan)] font-bold mb-1 text-sm md:text-base">
+                    {data.name}
+                  </div>
+                  <div className="text-[var(--color-text-muted)] text-xs md:text-sm line-clamp-2">
+                    {data.role}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

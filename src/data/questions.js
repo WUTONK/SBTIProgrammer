@@ -3,6 +3,7 @@ export const questions = [
   {
     id: 1,
     dimension: 'C-O',
+    subDimension: 'CO2', // 外部依赖态度
     text: '当你接手了一个祖传的且没有任何注释的系统，你的反应是？',
     options: [
       { text: 'A. 锁死代码库权限，谁也不准碰，我自己研究到死', score: -1 },
@@ -13,6 +14,7 @@ export const questions = [
   {
     id: 2,
     dimension: 'C-O',
+    subDimension: 'CO1', // 知识共享意愿
     text: '公司强制要求补全所有核心模块的 API 文档，你打算？',
     options: [
       { text: 'A. 随便写点废话应付，核心逻辑那是我的护城河，怎么能随便暴露', score: -1 },
@@ -23,6 +25,7 @@ export const questions = [
   {
     id: 3,
     dimension: 'C-O',
+    subDimension: 'CO2', // 外部依赖态度
     text: '你用的第三方开源组件出了一个恶心但不致命的 Bug：',
     options: [
       { text: 'A. 下载源码，本地魔改打成私服包，这辈子都不打算升版本了', score: -1 },
@@ -33,6 +36,7 @@ export const questions = [
   {
     id: 4,
     dimension: 'C-O',
+    subDimension: 'CO3', // 协作开放度
     text: '跨部门联调时，对方接口一直超时，你的对策是：',
     options: [
       { text: 'A. 不沟通，默默把超时时间设为 99999ms，让他自己玩去', score: -1 },
@@ -43,6 +47,7 @@ export const questions = [
   {
     id: 5,
     dimension: 'C-O',
+    subDimension: 'CO1', // 知识共享意愿
     text: '准备离职了，面对交接工作，你的态度是：',
     options: [
       { text: 'A. 把最核心的几行代码混淆一下，留下一句"只有上帝和我知道这是干嘛的"', score: -1 },
@@ -53,6 +58,7 @@ export const questions = [
   {
     id: 6,
     dimension: 'C-O',
+    subDimension: 'CO3', // 协作开放度
     text: '面对团队新人的代码 Review 请求：',
     options: [
       { text: 'A. 直接 Reject，留下一句"自己悟"，拒绝提供任何帮助', score: -1 },
@@ -63,6 +69,7 @@ export const questions = [
   {
     id: 7,
     dimension: 'C-O',
+    subDimension: 'CO1', // 知识共享意愿
     text: '发现一个很棒的业务实现思路：',
     options: [
       { text: 'A. 藏在心里，下次晋升答辩时拿出来惊艳所有人', score: -1 },
@@ -73,6 +80,7 @@ export const questions = [
   {
     id: 8,
     dimension: 'C-O',
+    subDimension: 'CO3', // 协作开放度
     text: '当你的代码被指出有设计缺陷时：',
     options: [
       { text: 'A. 愤怒反击，指责对方不懂业务，誓死捍卫自己的代码尊严', score: -1 },
@@ -85,6 +93,7 @@ export const questions = [
   {
     id: 9,
     dimension: 'S-I',
+    subDimension: 'SI1', // 技术尝新意愿
     text: '新出了个号称能颠覆行业的前端框架，你的态度是：',
     options: [
       { text: 'A. 纯属脱裤子放屁，jQuery 再战五百年！', score: -1 },
@@ -95,6 +104,7 @@ export const questions = [
   {
     id: 10,
     dimension: 'S-I',
+    subDimension: 'SI2', // 架构演进倾向
     text: '生产环境数据库需要升级，你怎么选？',
     options: [
       { text: 'A. 坚守 MySQL 5.7，只要不宕机，打死不升级', score: -1 },
@@ -105,6 +115,7 @@ export const questions = [
   {
     id: 11,
     dimension: 'S-I',
+    subDimension: 'SI2', // 架构演进倾向
     text: '公司要把庞大的单体应用拆成微服务：',
     options: [
       { text: 'A. 极力反对，警告老板拆分会导致事务一致性地狱，维护成本翻倍', score: -1 },
@@ -115,6 +126,7 @@ export const questions = [
   {
     id: 12,
     dimension: 'S-I',
+    subDimension: 'SI3', // 风险承受度
     text: '关于测试覆盖率：',
     options: [
       { text: 'A. 人工点两下不死机就行了，写测试纯属浪费时间', score: -1 },
@@ -125,6 +137,7 @@ export const questions = [
   {
     id: 13,
     dimension: 'S-I',
+    subDimension: 'SI3', // 风险承受度
     text: '部署发版流程你倾向于：',
     options: [
       { text: 'A. 必须在深夜 2 点由 3 个老员工通过 FTP 手动覆盖文件，充满仪式感', score: -1 },
@@ -135,6 +148,7 @@ export const questions = [
   {
     id: 14,
     dimension: 'S-I',
+    subDimension: 'SI2', // 架构演进倾向
     text: '遇到系统性能瓶颈，你首先想到：',
     options: [
       { text: 'A. 加机器加内存！硬件能解决的问题绝不动代码', score: -1 },
@@ -145,6 +159,7 @@ export const questions = [
   {
     id: 15,
     dimension: 'S-I',
+    subDimension: 'SI1', // 技术尝新意愿
     text: '团队讨论技术栈选型：',
     options: [
       { text: 'A. Java/C++ 老三样，招人好招，跑路好交接', score: -1 },
@@ -155,6 +170,7 @@ export const questions = [
   {
     id: 16,
     dimension: 'S-I',
+    subDimension: 'SI3', // 风险承受度
     text: '面对编译器给出的 100 个过时警告 (Deprecation Warning)：',
     options: [
       { text: 'A. 加上 @SuppressWarnings 或修改配置屏蔽警告，眼不见为净', score: -1 },
@@ -167,6 +183,7 @@ export const questions = [
   {
     id: 17,
     dimension: 'T-P',
+    subDimension: 'TP1', // 底层探究欲
     text: '面试官问你红黑树如何反转，你会想：',
     options: [
       { text: 'A. 详细在白板上推演时间复杂度和平衡条件，甚至想讲一下 B+ 树', score: -1 },
@@ -177,6 +194,7 @@ export const questions = [
   {
     id: 18,
     dimension: 'T-P',
+    subDimension: 'TP3', // 抽象建模倾向
     text: '接手一个连最基本的设计模式都没有的草台班子项目：',
     options: [
       { text: 'A. 痛心疾首，画了 10 张 UML 图试图重新梳理领域模型', score: -1 },
@@ -187,6 +205,7 @@ export const questions = [
   {
     id: 19,
     dimension: 'T-P',
+    subDimension: 'TP1', // 底层探究欲
     text: '遇到一个极其诡异、几率 0.01% 的线上玄学 Bug：',
     options: [
       { text: 'A. 翻阅 JVM 源码或操作系统底层汇编，必须找出根本原因', score: -1 },
@@ -197,6 +216,7 @@ export const questions = [
   {
     id: 20,
     dimension: 'T-P',
+    subDimension: 'TP3', // 抽象建模倾向
     text: '学习一门新语言，你的习惯是：',
     options: [
       { text: 'A. 先把官方文档的语言规范、内存模型和并发哲学通读三遍', score: -1 },
@@ -207,6 +227,7 @@ export const questions = [
   {
     id: 21,
     dimension: 'T-P',
+    subDimension: 'TP2', // 业务导向性
     text: '面对极其复杂的业务逻辑剥离需求：',
     options: [
       { text: 'A. 坚持 DDD（领域驱动设计），严格划分限界上下文', score: -1 },
@@ -217,6 +238,7 @@ export const questions = [
   {
     id: 22,
     dimension: 'T-P',
+    subDimension: 'TP2', // 业务导向性
     text: '面对产品经理明天的加急需求，现在是晚上 10 点：',
     options: [
       { text: 'A. 拒绝！这破坏了系统的架构完整性，必须重新走评审流程！', score: -1 },
@@ -227,6 +249,7 @@ export const questions = [
   {
     id: 23,
     dimension: 'T-P',
+    subDimension: 'TP1', // 底层探究欲
     text: '看到网上一篇深度分析 CAP 定理的雄文：',
     options: [
       { text: 'A. 仔细研读，在评论区就最终一致性展开 5000 字辩论', score: -1 },
@@ -239,6 +262,7 @@ export const questions = [
   {
     id: 24,
     dimension: 'P-R',
+    subDimension: 'PR1', // 规范遵循度
     text: '看到别人的代码里混用空格和 Tab：',
     options: [
       { text: 'A. 暴跳如雷，立刻提 PR 修正，并强制全仓库接入 ESLint/Prettier', score: -1 },
@@ -249,6 +273,7 @@ export const questions = [
   {
     id: 25,
     dimension: 'P-R',
+    subDimension: 'PR1', // 规范遵循度
     text: '给一个极其关键核心变量命名：',
     options: [
       { text: 'A. 查阅字典，翻遍词根，最终定下一个 30 个字母、完美表达其生命周期的驼峰名', score: -1 },
@@ -259,6 +284,7 @@ export const questions = [
   {
     id: 26,
     dimension: 'P-R',
+    subDimension: 'PR3', // 交付妥协度
     text: '代码库里随处可见前人留下的 // TODO: 以后优化：',
     options: [
       { text: 'A. 顺手把它们全清了，哪怕加班到半夜也要把技术债还完', score: -1 },
@@ -269,6 +295,7 @@ export const questions = [
   {
     id: 27,
     dimension: 'P-R',
+    subDimension: 'PR3', // 交付妥协度
     text: '临近发版还有半小时，发现了一个不影响主流程但很难看的 UI 错位：',
     options: [
       { text: 'A. 绝对不能忍！立即打回，修复后重新走全套回归测试！', score: -1 },
@@ -279,6 +306,7 @@ export const questions = [
   {
     id: 28,
     dimension: 'P-R',
+    subDimension: 'PR2', // 质量要求标准
     text: '处理一个复杂的异常报错：',
     options: [
       { text: 'A. 针对每一种可能的异常类型编写精准的捕获和恢复策略，绝不遗漏', score: -1 },
@@ -289,6 +317,7 @@ export const questions = [
   {
     id: 29,
     dimension: 'P-R',
+    subDimension: 'PR2', // 质量要求标准
     text: '项目要求打日志：',
     options: [
       { text: 'A. 严格按照 DEBUG/INFO/WARN/ERROR 规范，记录完整的上下文和链路 ID', score: -1 },
@@ -299,6 +328,7 @@ export const questions = [
   {
     id: 30,
     dimension: 'P-R',
+    subDimension: 'PR2', // 质量要求标准
     text: '别人评价你的代码"有坏味道 (Bad Smell)"：',
     options: [
       { text: 'A. 深感羞愧，买了一本《重构》连夜拜读，誓要洗心革面', score: -1 },

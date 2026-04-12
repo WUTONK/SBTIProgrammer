@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { questions } from '../data/questions.js'
 import { archetypes } from '../data/archetypes.js'
 
-export default function DeveloperMode({ onJumpToQuestion, onPreviewResult }) {
+export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipLoading, setSkipLoading }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -35,6 +35,24 @@ export default function DeveloperMode({ onJumpToQuestion, onPreviewResult }) {
         </div>
 
         <div className="space-y-8">
+          {/* Settings */}
+          <section>
+            <h3 className="text-xl text-[var(--color-primary)] mb-4 uppercase border-l-4 border-[var(--color-primary)] pl-2">
+              Settings
+            </h3>
+            <div className="flex items-center space-x-4">
+              <label className="flex items-center cursor-pointer text-[var(--color-primary)] hover:text-[var(--color-accent-cyan)] transition-colors">
+                <input
+                  type="checkbox"
+                  checked={skipLoading}
+                  onChange={(e) => setSkipLoading(e.target.checked)}
+                  className="mr-3 w-5 h-5 accent-[var(--color-primary)] bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)]"
+                />
+                <span className="uppercase tracking-widest text-sm">Skip Loading Animation</span>
+              </label>
+            </div>
+          </section>
+
           {/* Jump to Question */}
           <section>
             <h3 className="text-xl text-[var(--color-primary)] mb-4 uppercase border-l-4 border-[var(--color-primary)] pl-2">
