@@ -17,12 +17,15 @@ import { calculateResult } from './utils/calculateResult.js'
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState(SCREENS.HOME)
+  const [userName, setUserName] = useState('')
   const [answers, setAnswers] = useState([])
   const [result, setResult] = useState(null)
   const [quizIndex, setQuizIndex] = useState(0)
   const [skipLoading, setSkipLoading] = useState(false)
+  const [useCrtCurve, setUseCrtCurve] = useState(false)
 
-  const handleStart = useCallback(() => {
+  const handleStart = useCallback((name) => {
+    setUserName(name || 'GUEST')
     setAnswers([])
     setResult(null)
     setQuizIndex(0)
@@ -89,21 +92,21 @@ export default function App() {
       case SCREENS.LOADING:
         return <LoadingScreen answers={answers} onComplete={handleLoadingComplete} />
       case SCREENS.RESULT:
-        return <Result result={result} onRestart={handleRestart} />
+        return <Result result={result} onRestart={handleRestart} userName={userName} />
       default:
         return <Home onStart={handleStart} />
     }
   }
 
   return (
-    <div className="crt h-[100dvh] w-full bg-[var(--color-bg-dark)] flex flex-col relative overflow-hidden">
+    <div className={`crt ${useCrtCurve ? 'crt-curve' : ''} h-[100dvh] w-full bg-[var(--color-bg-dark)] flex flex-col relative overflow-hidden`}>
       {/* Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none z-50 mix-blend-overlay opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')]"></div>
       
       {/* Vignette effect */}
       <div className="absolute inset-0 pointer-events-none z-40 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.95)_100%)]"></div>
 
-      <div className="relative z-10 flex-1 flex flex-col h-full overflow-y-auto">
+      <div className="crt-content-wrapper relative flex-1 flex flex-col h-full overflow-y-auto">
         {renderScreen()}
       </div>
 
@@ -112,6 +115,8 @@ export default function App() {
         onPreviewResult={handlePreviewResult}
         skipLoading={skipLoading}
         setSkipLoading={setSkipLoading}
+        useCrtCurve={useCrtCurve}
+        setUseCrtCurve={setUseCrtCurve}
       />
     </div>
   )

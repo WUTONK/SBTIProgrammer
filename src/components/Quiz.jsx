@@ -10,15 +10,39 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
   const handleSelect = (option) => {
     if (isTransitioning) return
 
-    setIsTransitioning(true)
-    const newAnswers = [...answers, option]
+    const newAnswers = [...answers]
+    newAnswers[currentIndex] = option
+    setAnswers(newAnswers)
 
+    // Auto advance after selection
+    setIsTransitioning(true)
     setTimeout(() => {
       if (currentIndex + 1 < questions.length) {
-        setAnswers(newAnswers)
         setCurrentIndex(currentIndex + 1)
       } else {
         onComplete(newAnswers)
+      }
+      setIsTransitioning(false)
+    }, 300)
+  }
+
+  const handlePrev = () => {
+    if (isTransitioning || currentIndex === 0) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setCurrentIndex(currentIndex - 1)
+      setIsTransitioning(false)
+    }, 300)
+  }
+
+  const handleNext = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      if (currentIndex + 1 < questions.length) {
+        setCurrentIndex(currentIndex + 1)
+      } else {
+        onComplete(answers)
       }
       setIsTransitioning(false)
     }, 300)
@@ -59,19 +83,46 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
 
           {/* 选项 */}
           <div className="space-y-4">
-            {currentQuestion.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleSelect(option)}
-                disabled={isTransitioning}
-                className="w-full text-left retro-btn p-4 text-[var(--color-primary)] transition-all duration-200 cursor-pointer disabled:cursor-not-allowed group uppercase tracking-wider text-base md:text-lg"
-              >
-                <span className="text-[var(--color-accent-cyan)] group-hover:text-[var(--color-bg-dark)] mr-3 font-bold">
-                  [{String.fromCharCode(65 + index)}]
-                </span>
-                {option.text}
-              </button>
-            ))}
+            {currentQuestion.options.map((option, index) => {
+              const isSelected = answers[currentIndex]?.text === option.text;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleSelect(option)}
+                  disabled={isTransitioning}
+                  className={`w-full text-left retro-btn p-4 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed group uppercase tracking-wider text-base md:text-lg ${
+                    isSelected 
+                      ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' 
+                      : 'text-[var(--color-primary)]'
+                  }`}
+                >
+                  <span className={`${isSelected ? 'text-[var(--color-bg-dark)]' : 'text-[var(--color-accent-cyan)] group-hover:text-[var(--color-bg-dark)]'} mr-3 font-bold`}>
+                    [{String.fromCharCode(65 + index)}]
+                  </span>
+                  {option.text}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 导航按钮 */}
+          <div className="flex justify-between mt-8 pt-6 border-t border-[var(--color-primary)]/30">
+            <button
+              onClick={handlePrev}
+              disabled={isTransitioning || currentIndex === 0}
+              className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base ${
+                currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)]'
+              }`}
+            >
+              {'<'} 上一页
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={isTransitioning}
+              className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)] transition-colors`}
+            >
+              {currentIndex + 1 === questions.length ? '完成' : '下一页'} {'>'}
+            </button>
           </div>
         </div>
       </div>

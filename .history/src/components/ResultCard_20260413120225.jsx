@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
 
 const dimensionData = {
   dim1: {
@@ -95,17 +94,7 @@ const subDimensionData = {
   }
 }
 
-const Divider = ({ title }) => (
-  <div className="flex items-center text-[var(--color-primary)] mt-8 mb-6 opacity-80 w-full overflow-hidden">
-    <span className="text-xs tracking-widest">+{'-'.repeat(3)}</span>
-    {title && <span className="px-2 text-xs font-bold text-[var(--color-accent-cyan)] whitespace-nowrap">{title}</span>}
-    <span className="text-xs tracking-widest overflow-hidden whitespace-nowrap">
-      {'-'.repeat(100)}
-    </span>
-  </div>
-);
-
-const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role }, ref) => {
+const ResultCard = forwardRef(({ code, title, description, subDimensions }, ref) => {
   const dim1 = code[0]
   const dim2 = code[1]
   const dim3 = code[2]
@@ -136,25 +125,18 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
       <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-[var(--color-accent-cyan)]"></div>
 
       {/* 头部信息 */}
-      <div className="flex justify-between items-start border-b border-dashed border-[var(--color-primary)] pb-3 mb-4">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-[var(--color-primary)] animate-pulse mt-0.5"></div>
-            <span className="text-sm font-bold tracking-widest" style={{ textShadow: '0 0 5px #ff9900' }}>SYS.ID: {code}</span>
-          </div>
-          {userName && (
-            <div className="text-xs font-bold tracking-widest ml-5 opacity-90" style={{ textShadow: '0 0 3px #ff9900' }}>
-              USER: {userName}
-            </div>
-          )}
+      <div className="flex justify-between items-center border-b-2 border-[var(--color-primary)] pb-3 mb-4">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-[var(--color-primary)] animate-pulse"></div>
+          <span className="text-sm font-bold tracking-widest" style={{ textShadow: '0 0 5px #ff9900' }}>SYS.ID: {code}</span>
         </div>
-        <div className="text-xs text-[var(--color-accent-cyan)] mt-1" style={{ textShadow: '0 0 5px #00ffff' }}>
+        <div className="text-xs text-[var(--color-accent-cyan)]" style={{ textShadow: '0 0 5px #00ffff' }}>
           VERIFIED
         </div>
       </div>
 
       {/* 核心结果 */}
-      <div className="text-center mb-4 relative">
+      <div className="text-center mb-6 relative">
         <div className="absolute inset-0 bg-[var(--color-primary)] opacity-10 blur-xl"></div>
         <h1 className="text-5xl font-bold mb-1 tracking-tighter" style={{ textShadow: '0 0 15px #ff9900' }}>
           {code}
@@ -164,67 +146,55 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
         </h2>
       </div>
 
-      {/* 代表人物区域 */}
-      {role && (
-        <>
-          <Divider title="[ 代表人物 | REPRESENTATIVE ]" />
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 border border-[var(--color-primary)] p-1 relative z-[60]">
-              <img 
-                src={`${import.meta.env.BASE_URL}avatar/Linus.png`} 
-                alt={role} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="text-center">
-              <div className="text-base sm:text-lg font-bold" style={{ textShadow: '0 0 4px #ff9900' }}>
-                {role}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-
       {/* 描述区域 */}
-      <Divider title="[ 人格描述 | PERSONALITY ]" />
-      <div className="px-2">
+      <div className="bg-[var(--color-bg-card)] border border-[var(--color-primary)] p-3 mt-4 mb-4">
+        <div className="text-xs text-[var(--color-accent-cyan)] font-bold mb-2">
+          {'>'} 人格描述 (PERSONALITY)
+        </div>
         <p className="text-xs leading-relaxed" style={{ textShadow: '0 0 2px #ff9900' }}>
           {description}
         </p>
       </div>
 
       {/* 纬度画像区域 */}
-      <Divider title="[ 纬度画像 | DIMENSIONS ]" />
-      <div className="flex flex-col gap-5 px-2">
-        {dimensions.map((dim, index) => (
-          <div key={index} className="flex flex-col gap-1">
-            <div className="flex items-center justify-between">
-              <span className="text-[var(--color-accent-cyan)] font-bold text-sm tracking-wider">{dim.title}</span>
-              <div className="flex items-center justify-center border border-[var(--color-primary)] text-[var(--color-primary)] w-7 shrink-0 h-5 font-bold shadow-[0_0_5px_rgba(255,153,0,0.5)]">
-                {dim.label}
+      <div className="bg-[var(--color-bg-card)] border border-[var(--color-primary)] p-3 mt-4 mb-4">
+        <div className="text-xs text-[var(--color-accent-cyan)] font-bold mb-3">
+          {'>'} 纬度画像 (DIMENSIONS)
+        </div>
+        <div className="flex flex-col gap-3">
+          {dimensions.map((dim, index) => (
+            <div key={index} className="flex flex-col mb-3 last:mb-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[var(--color-accent-cyan)] font-bold text-sm tracking-wider">{dim.title}</span>
+                <div className="flex items-center justify-center w-5 h-5 bg-[var(--color-primary)] shadow-[0_0_10px_rgba(255,153,0,0.8)] shrink-0 relative z-[60]">
+                  <span className="text-white text-sm font-extrabold leading-none" style={{ textShadow: '0 0 4px rgba(255,255,255,0.9), 0 0 8px rgba(255,255,255,0.6)', letterSpacing: 0 }}>
+                    {dim.label}
+                  </span>
+                </div>
               </div>
+              <p className="text-xs leading-relaxed opacity-90" style={{ textShadow: '0 0 2px #ff9900' }}>
+                {dim.desc}
+              </p>
             </div>
-            <p className="text-xs leading-relaxed opacity-90" style={{ textShadow: '0 0 2px #ff9900' }}>
-              {dim.desc}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* 详细子维度画像 */}
       {subDimensions && Object.keys(subDimensions).length > 0 && (
-        <>
-          <Divider title="[ 详细画像 | SUB-DIMENSIONS ]" />
-          <div className="flex flex-col gap-4 px-2">
-            {Object.entries(subDimensions).map(([key, level], idx, arr) => {
+        <div className="bg-[var(--color-bg-card)] border border-[var(--color-primary)] p-3 mt-4 mb-4">
+          <div className="text-xs text-[var(--color-accent-cyan)] font-bold mb-3">
+            {'>'} 详细画像 (SUB-DIMENSIONS)
+          </div>
+          <div className="flex flex-col gap-3">
+            {Object.entries(subDimensions).map(([key, level]) => {
               const data = subDimensionData[key] || {};
               const desc = data[level] || '';
-              const isLast = idx === arr.length - 1;
               return (
-                <div key={key} className={`flex flex-col ${!isLast ? 'border-b border-dashed border-[var(--color-primary)] border-opacity-30 pb-3' : ''}`}>
+                <div key={key} className="flex flex-col border-b border-[var(--color-primary)] border-opacity-20 pb-2 last:border-0 last:pb-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-[var(--color-accent-cyan)] font-bold text-xs">{key}</span>
-                    <span className={`text-[10px] font-bold ${level === 'H' ? 'text-green-400 border border-green-400' : level === 'L' ? 'text-red-400 border border-red-400' : 'text-yellow-400 border border-yellow-400'}`} style={{ letterSpacing: 0, padding: '0 1.5px' }}>
+                    <span className={`text-[10px] font-bold ${level === 'H' ? 'text-green-400 border border-green-400' : level === 'L' ? 'text-red-400 border border-red-400' : 'text-yellow-400 border border-yellow-400'}`} style={{ letterSpacing: 0, padding: '0 3px' }}>
                       {level}
                     </span>
                     <span className="text-[10px] text-[var(--color-primary)] opacity-80">{data.title}</span>
@@ -236,28 +206,11 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
               );
             })}
           </div>
-        </>
+        </div>
       )}
 
-      {/* 终端链接二维码 */}
-      <Divider title="[ 终端链接 | SYSTEM_LINK ]" />
-      <div className="flex flex-col items-center mb-2 mt-2">
-        <div className="bg-white p-1.5 relative z-[60]">
-          <QRCodeSVG 
-            value="https://wutonk.github.io/SBTIProgrammer/" 
-            size={64} 
-            bgColor="#ffffff" 
-            fgColor="#000000" 
-            level="L"
-          />
-        </div>
-        <div className="text-[10px] tracking-[0.3em] opacity-80 mt-2">
-          SCAN_TO_INITIATE
-        </div>
-      </div>
-
       {/* 底部条码样式 */}
-      <div className="flex flex-col items-center border-t border-dashed border-[var(--color-primary)] pt-4 mt-6">
+      <div className="flex flex-col items-center border-t-2 border-[var(--color-primary)] pt-4 mt-2">
         <div className="flex gap-1 h-6 mb-1 w-full justify-center opacity-80">
           {/* 生成随机条形码 */}
           {Array.from({ length: 30 }).map((_, i) => (
@@ -277,7 +230,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
       </div>
       
       {/* 扫描线效果 */}
-      <div className="absolute inset-0 pointer-events-none opacity-20 z-50" style={{
+      <div className="absolute inset-0 pointer-events-none opacity-20" style={{
         background: 'linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.5) 50%)',
         backgroundSize: '100% 4px'
       }}></div>

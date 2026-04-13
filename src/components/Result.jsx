@@ -3,7 +3,7 @@ import * as htmlToImage from 'html-to-image'
 import ResultCard from './ResultCard'
 import { archetypes } from '../data/archetypes.js'
 
-export default function Result({ result, onRestart }) {
+export default function Result({ result, onRestart, userName }) {
   const cardRef = useRef(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [debugIndex, setDebugIndex] = useState(-1)
@@ -79,6 +79,8 @@ export default function Result({ result, onRestart }) {
           title={displayResult.name || displayResult.typeName} 
           description={displayResult.description} 
           subDimensions={displayResult.subDimensions}
+          userName={userName}
+          role={displayResult.role}
         />
       </div>
 

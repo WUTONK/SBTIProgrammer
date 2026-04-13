@@ -3,6 +3,7 @@ import { archetypes } from '../data/archetypes.js';
 
 export default function Home({ onStart }) {
   const [showGallery, setShowGallery] = useState(false);
+  const [userName, setUserName] = useState('');
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 relative">
@@ -39,7 +40,7 @@ export default function Home({ onStart }) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-6 w-full">
           <div className="flex flex-wrap justify-center gap-4 w-full">
             {['SYS.FAST', '16_TYPES', 'SHAREABLE'].map((tag) => (
               <span
@@ -51,8 +52,27 @@ export default function Home({ onStart }) {
             ))}
           </div>
 
+          <div className="w-full max-w-xs flex flex-col items-start gap-2 mt-2">
+            <label className="text-[var(--color-primary)] text-sm uppercase">
+              {'>'} ENTER_NAME (OPTIONAL):
+            </label>
+            <div className="flex items-center w-full border border-[var(--color-primary)] bg-[var(--color-bg-card)] px-3 py-2 shadow-[inset_0_0_10px_rgba(255,153,0,0.1)] focus-within:shadow-[inset_0_0_15px_rgba(255,153,0,0.3)] transition-shadow">
+              <span className="text-[var(--color-primary)] mr-2">{'>'}</span>
+              <input
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                className="bg-transparent border-none outline-none text-[var(--color-primary)] w-full uppercase font-bold placeholder-[var(--color-primary)] placeholder-opacity-30"
+                placeholder="GUEST"
+                maxLength={16}
+                spellCheck="false"
+              />
+              <span className="animate-blink text-[var(--color-primary)] ml-1">_</span>
+            </div>
+          </div>
+
           <button
-            onClick={onStart}
+            onClick={() => onStart(userName)}
             className="retro-btn w-full max-w-xs font-bold py-5 px-8 text-xl uppercase tracking-widest cursor-pointer"
           >
             <span className="">&gt; START_TEST</span>

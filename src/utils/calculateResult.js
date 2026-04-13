@@ -2,7 +2,7 @@ import { archetypes } from '../data/archetypes.js'
 import { questions } from '../data/questions.js'
 
 export function calculateResult(answers) {
-  const rawScores = answers.map((answer) => answer.score)
+  const rawScores = Array.from({ length: 30 }, (_, i) => answers[i] ? answers[i].score : 0)
 
   const sum = (arr, start, end) => arr.slice(start, end).reduce((a, b) => a + b, 0)
 
@@ -54,6 +54,7 @@ export function calculateResult(answers) {
   }
   
   answers.forEach((answer, index) => {
+    if (!answer) return;
     const q = questions[index]
     if (q && q.subDimension) {
       subDimensionScores[q.subDimension].sum += answer.score
