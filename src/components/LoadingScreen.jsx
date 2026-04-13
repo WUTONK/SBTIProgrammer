@@ -55,14 +55,15 @@ export default function LoadingScreen({ answers, onComplete }) {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 relative overflow-hidden">
-      {/* 核心终端卡片 */}
+      {/* 核心终端卡片：与 Quiz 中的 Mock 终端完全一致 */}
       <div className="max-w-md w-full text-center retro-card p-8 md:p-12 bg-[var(--color-bg-card)] shadow-[0_0_50px_rgba(255,153,0,0.3)] relative z-10">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-10 overflow-hidden -translate-y-[2px]">
-          <div className="w-full h-2 bg-black mt-2 shadow-[inset_0_0_10px_var(--color-primary)]"></div>
-          <div className="absolute inset-0 bg-[var(--color-primary)] opacity-40"></div>
-          <div className="w-full h-full bg-gradient-to-b from-[var(--color-primary)] to-transparent opacity-20"></div>
+        {/* 已经关闭的缝隙 (与 Quiz 中的状态衔接) - 宽度调整为 340px */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[340px] h-10 overflow-hidden -translate-y-[2px]">
+          {/* 快门已经完全落下 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-primary)] to-transparent opacity-40"></div>
+          {/* 密封线 */}
+          <div className="w-full h-1 bg-[var(--color-primary)] absolute bottom-0 shadow-[0_0_15px_var(--color-primary)]"></div>
         </div>
-
         <div className="mb-10">
           <div className="text-7xl text-[var(--color-primary)] mb-6 glow-text font-mono h-20 flex items-center justify-center">
              {spinnerChars[spinnerIndex]}

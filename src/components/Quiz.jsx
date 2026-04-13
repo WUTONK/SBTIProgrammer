@@ -147,14 +147,17 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
       <div className={`absolute inset-0 flex items-center justify-center px-4 transition-all duration-700 z-[100]
         ${showTerminal ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
         <div className="max-w-md w-full text-center retro-card p-8 md:p-12 bg-[var(--color-bg-card)] shadow-[0_0_50px_rgba(255,153,0,0.3)]">
-          {/* 顶部的进纸口缝隙 */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-10 -translate-y-[2px] overflow-hidden">
-             {/* 缝隙背景 */}
-             <div className="w-full h-2 bg-black mt-2 shadow-[inset_0_0_10px_var(--color-primary)]"></div>
+          {/* 顶部的进纸口缝隙 - 宽度调整为 340px */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[340px] h-10 -translate-y-[2px] overflow-hidden">
+             {/* 缝隙背景：在关闭时变为透明 */}
+             <div className={`w-full h-2 bg-black mt-2 shadow-[inset_0_0_10px_var(--color-primary)] transition-opacity duration-300 ${isSlitClosed ? 'opacity-0' : 'opacity-100'}`}></div>
+             
              {/* 缝隙快门 (Shutter)：关闭时的渐变效果 */}
-             <div className={`absolute inset-0 bg-gradient-to-b from-[var(--color-primary)] to-transparent transition-transform duration-500 ease-in-out
-               ${isSlitClosed ? 'translate-y-0 opacity-80' : '-translate-y-full opacity-0'}`}>
+             <div className={`absolute inset-0 bg-gradient-to-b from-[var(--color-primary)] to-transparent transition-all duration-500 ease-in-out
+               ${isSlitClosed ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
                <div className="w-full h-full bg-[var(--color-primary)] opacity-40 animate-pulse"></div>
+               {/* 闭合后的密封线 */}
+               <div className={`w-full h-1 bg-[var(--color-primary)] absolute bottom-0 shadow-[0_0_15px_var(--color-primary)] transition-opacity duration-500 ${isSlitClosed ? 'opacity-100' : 'opacity-0'}`}></div>
              </div>
           </div>
 

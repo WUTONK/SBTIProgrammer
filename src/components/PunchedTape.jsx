@@ -31,29 +31,37 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
   const isPunching = lastAction.type === 'punch' && (Date.now() - lastAction.timestamp < 200);
   const isCorrecting = lastAction.type === 'correct' && (Date.now() - lastAction.timestamp < 800);
 
+  // 像素圆 clip-path (八边形)
+  const pixelCircle = 'polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)';
+
   return (
     <div className="flex flex-col items-center w-full relative">
-      {/* 1. 固定打孔机 */}
-      <div className="relative mb-4 z-30">
-        <div className={`w-16 h-12 bg-[#2a2a2a] border-4 border-[#555] relative flex items-end justify-center pb-1 transition-transform ${isPunching ? 'translate-y-1' : ''}`}
+      {/* 像素打孔机 - 100% 还原 51ba0cb 样式 */}
+      <div className="relative mb-2 z-30">
+        <div className={`w-16 h-12 bg-[var(--color-primary-dark)] border-4 border-[var(--color-primary)] relative flex items-end justify-center pb-1 transition-transform ${isPunching ? 'translate-y-1' : ''}`}
              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 80% 100%, 20% 100%, 0 70%)' }}>
-          <div className="w-8 h-2 bg-black border-2 border-[#444] mb-1"></div>
-          {isPunching && <div className="absolute -bottom-2 w-10 h-1 bg-[var(--color-primary)] animate-pulse"></div>}
+          <div className="w-8 h-2 bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] mb-1"></div>
+          {isPunching && <div className="absolute -bottom-2 w-10 h-1 bg-[var(--color-primary)] animate-pulse shadow-[0_0_10px_var(--color-primary)]"></div>}
         </div>
       </div>
 
-      {/* 2. 纸带本体 - 增加抖动和受控下坠 */}
+      {/* 纸带主体 - 还原 51ba0cb 结构，加入 current 下坠逻辑 */}
       <div className={`relative transition-all 
         ${isShaking ? 'animate-shake' : ''}
         ${isFalling ? 'translate-y-[60vh] opacity-0 scale-y-110 blur-[1px] duration-[800ms] ease-in' : 'translate-y-0 opacity-100 duration-[1000ms] ease-in-out'}`}>
         
-        <div className="relative bg-[#d1c4a9] text-black p-2 font-mono text-[10px] md:text-xs shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#b3a68c]">
+        {/* 纸带背景容器 - 调整宽度到 340px */}
+        <div className="relative bg-[#d1c4a9] text-black p-2 font-mono text-[10px] md:text-xs shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#b3a68c] w-[340px]">
+          {/* 左侧边缘装饰孔 */}
           <div className="absolute -left-1 top-0 bottom-0 w-1 flex flex-col justify-around">
-            {[...Array(20)].map((_, i) => <div key={i} className="w-1 h-1 bg-black/10"></div>)}
+            {[...Array(20)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-[var(--color-bg-dark)] opacity-10" style={{ clipPath: pixelCircle }}></div>
+            ))}
           </div>
 
           {rows.map(rowIdx => (
             <div key={rowIdx} className="flex items-center gap-3 py-1 border-b border-black/10 last:border-0">
+              {/* 孔洞 1-10 */}
               <div className="flex gap-1.5">
                 {[...Array(10)].map((_, colIdx) => {
                   const qIdx = rowIdx * 10 + colIdx;
@@ -63,19 +71,28 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
                     <div 
                       key={colIdx}
                       onClick={() => !isFalling && !isShaking && onJump(qIdx)}
-                      className={`w-3 h-3 border-2 transition-colors flex items-center justify-center
+                      className={`w-3 h-3 border-2 cursor-pointer transition-all flex items-center justify-center
                         ${answered ? 'bg-black border-black' : 'bg-transparent border-black/30'}
-                        ${current ? 'ring-2 ring-red-500 animate-pulse' : ''}`}
+                        ${current ? 'ring-2 ring-red-500 animate-pulse scale-110 z-10' : 'hover:scale-125 hover:bg-black/20'}`}
+                      style={{ clipPath: pixelCircle }}
                     >
-                      {answered && <div className="w-1 h-1 bg-white/20"></div>}
+                      {answered && <div className="w-1 h-1 bg-white/20" style={{ clipPath: pixelCircle }}></div>}
                     </div>
                   );
                 })}
               </div>
+
               <div className="w-px h-4 bg-black/40"></div>
-              <div className="w-10 opacity-60 font-bold">{String(rowIdx * 10 + 1).padStart(2, '0')}</div>
+
+              {/* 索引区间 - 还原 51ba0cb 的 scale-90 样式 */}
+              <div className="w-10 opacity-60 font-bold scale-90 whitespace-nowrap text-center">
+                {String(rowIdx * 10 + 1).padStart(2, '0')}-{String(rowIdx * 10 + 10).padStart(2, '0')}
+              </div>
+
               <div className="w-px h-4 bg-black/40"></div>
-              <div className="tracking-widest font-bold flex gap-0.5">
+
+              {/* HEX 预览区 - 还原 51ba0cb 的变色逻辑 */}
+              <div className={`tracking-widest font-bold flex gap-0.5 ${currentIndex >= rowIdx * 10 && currentIndex < (rowIdx + 1) * 10 ? 'text-red-600' : 'text-black'}`}>
                 {getHexPreview(rowIdx).split('').map((char, i) => (
                   <span key={i} className={char !== '-' ? 'bg-black/10 px-0.5' : ''}>{char}</span>
                 ))}
