@@ -199,7 +199,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
         {dimensions.map((dim, index) => (
           <div key={index} className="flex flex-col gap-1">
             <div className="flex items-center justify-between">
-              <span className="text-[var(--color-accent-cyan)] font-bold text-sm tracking-wider">{dim.title}</span>
+              <span className="text-[var(--color-accent-cyan)] font-bold text-sm tracking-wider pl-[2px]">{dim.title}</span>
               <div className="flex items-center justify-center border border-[var(--color-primary)] text-[var(--color-primary)] w-7 shrink-0 h-5 font-bold shadow-[0_0_5px_rgba(255,153,0,0.5)]">
                 {dim.label}
               </div>
@@ -223,7 +223,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
               return (
                 <div key={key} className={`flex flex-col ${!isLast ? 'border-b border-dashed border-[var(--color-primary)] border-opacity-30 pb-3' : ''}`}>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[var(--color-accent-cyan)] font-bold text-xs">{key}</span>
+                    <span className="text-[var(--color-accent-cyan)] font-bold text-xs pl-[2px]">{key}</span>
                     <span className={`text-[10px] font-bold ${level === 'H' ? 'text-green-400 border border-green-400' : level === 'L' ? 'text-red-400 border border-red-400' : 'text-yellow-400 border border-yellow-400'}`} style={{ letterSpacing: 0, padding: '0 1.5px' }}>
                       {level}
                     </span>

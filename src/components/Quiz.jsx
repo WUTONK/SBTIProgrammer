@@ -4,12 +4,14 @@ import PunchedTape from './PunchedTape.jsx'
 
 export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answers, setAnswers }) {
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isFinishing, setIsFinishing] = useState(false) 
+  const [isFalling, setIsFalling] = useState(false) 
 
   const currentQuestion = questions[currentIndex]
   const progressPercentage = Math.round((currentIndex / questions.length) * 100)
 
   const handleJump = (index) => {
-    if (isTransitioning) return
+    if (isTransitioning || isFinishing) return
     setIsTransitioning(true)
     setTimeout(() => {
       setCurrentIndex(index)
@@ -18,137 +20,94 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
   }
 
   const handleSelect = (option) => {
-    if (isTransitioning) return
-
+    if (isTransitioning || isFinishing) return
     const newAnswers = [...answers]
     newAnswers[currentIndex] = option
     setAnswers(newAnswers)
 
-    // Auto advance after selection
     setIsTransitioning(true)
     setTimeout(() => {
       if (currentIndex + 1 < questions.length) {
         setCurrentIndex(currentIndex + 1)
+        setIsTransitioning(false)
       } else {
-        onComplete(newAnswers)
+        triggerFinishSequence(newAnswers)
       }
-      setIsTransitioning(false)
     }, 300)
   }
 
-  const handlePrev = () => {
-    if (isTransitioning || currentIndex === 0) return
-    setIsTransitioning(true)
+  const triggerFinishSequence = (finalAnswers) => {
+    setIsFinishing(true)
     setTimeout(() => {
-      setCurrentIndex(currentIndex - 1)
-      setIsTransitioning(false)
-    }, 300)
+      setIsFalling(true)
+      setTimeout(() => {
+        onComplete(finalAnswers || answers)
+      }, 800)
+    }, 400)
   }
 
   const handleNext = () => {
-    if (isTransitioning) return
-    setIsTransitioning(true)
-    setTimeout(() => {
-      if (currentIndex + 1 < questions.length) {
+    if (isTransitioning || isFinishing) return
+    if (currentIndex + 1 < questions.length) {
+      setIsTransitioning(true)
+      setTimeout(() => {
         setCurrentIndex(currentIndex + 1)
-      } else {
-        onComplete(answers)
-      }
-      setIsTransitioning(false)
-    }, 300)
+        setIsTransitioning(false)
+      }, 300)
+    } else {
+      triggerFinishSequence()
+    }
   }
 
   return (
     <div className="flex-1 flex flex-col w-full h-full overflow-y-auto overflow-x-hidden">
-      {/* 1. 顶部功能区：打孔纸带系统 */}
-      <div className="flex-none pt-4 flex justify-center">
+      {/* 1. 顶部区域 */}
+      <div className="flex-none pt-4 flex justify-center z-50">
         <PunchedTape 
           currentIndex={currentIndex}
           answers={answers}
           totalQuestions={questions.length}
           onJump={handleJump}
+          isFalling={isFalling}
         />
       </div>
 
-      {/* 2. 锚点间距 (Anchor Spacer)
-          确保起始位置固定，防止题目切换时产生跳动。
-      */}
+      {/* 2. 锚点间距 (Anchor Spacer) - 恢复原有高度，将答题卡推至下方 */}
       <div className="flex-none h-[20vh] md:h-[25vh]"></div>
 
       {/* 3. 核心答题区域 */}
-      <div className="flex-none flex flex-col items-center px-4 pb-20">
+      <div className={`flex-none flex flex-col items-center px-4 pb-20 transition-all duration-700 
+        ${isFinishing ? 'opacity-0 translate-y-20 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
         <div className="max-w-2xl w-full">
           {/* 进度条 */}
           <div className="mb-8 retro-card p-4">
-            <div className="flex justify-between text-[var(--color-primary)] mb-2 uppercase tracking-widest text-sm">
+            <div className="flex justify-between text-[var(--color-primary)] mb-2 uppercase text-sm">
               <span>{'>'} QUERY {currentIndex + 1}/{questions.length}</span>
               <span className="glow-text">{progressPercentage}%</span>
             </div>
             <div className="w-full bg-[var(--color-bg-dark)] border border-[var(--color-primary)] h-4 p-[2px]">
-              <div
-                className="bg-[var(--color-primary)] h-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(255,153,0,0.8)]"
-                style={{ width: `${progressPercentage}%` }}
-              />
+              <div className="bg-[var(--color-primary)] h-full transition-all duration-500" style={{ width: `${progressPercentage}%` }} />
             </div>
           </div>
 
           {/* 题目卡片 */}
-          <div
-            className={`retro-card p-6 md:p-8 mb-6 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
-          >
-            {/* 维度标签 */}
-            <div className="flex items-center mb-6 border-b border-[var(--color-primary)] pb-2">
-              <span className="inline-block text-sm text-[var(--color-bg-dark)] bg-[var(--color-primary)] px-2 py-1 uppercase font-bold tracking-widest shadow-[0_0_10px_rgba(255,153,0,0.5)]">
-                DIMENSION: {currentQuestion.dimension}
-              </span>
-              <span className="ml-auto animate-blink text-[var(--color-primary)] text-xl">_</span>
-            </div>
-
-            <h2 className="text-xl md:text-3xl font-bold text-[var(--color-primary)] mb-8 leading-relaxed glow-text uppercase">
+          <div className={`retro-card p-6 md:p-8 mb-6 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+            <h2 className="text-xl md:text-3xl font-bold text-[var(--color-primary)] mb-8 uppercase glow-text leading-relaxed">
               {currentQuestion.text}
             </h2>
-
-            {/* 选项 */}
             <div className="space-y-4">
-              {currentQuestion.options.map((option, index) => {
-                const isSelected = answers[currentIndex]?.text === option.text;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleSelect(option)}
-                    disabled={isTransitioning}
-                    className={`w-full text-left retro-btn p-4 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed group uppercase tracking-wider text-base md:text-lg ${
-                      isSelected 
-                        ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' 
-                        : 'text-[var(--color-primary)]'
-                    }`}
-                  >
-                    <span className={`${isSelected ? 'text-[var(--color-bg-dark)]' : 'text-[var(--color-accent-cyan)] group-hover:text-[var(--color-bg-dark)]'} mr-3 font-bold`}>
-                      [{String.fromCharCode(65 + index)}]
-                    </span>
-                    {option.text}
-                  </button>
-                );
-              })}
+              {currentQuestion.options.map((option, index) => (
+                <button key={index} onClick={() => handleSelect(option)} disabled={isTransitioning || isFinishing}
+                  className={`w-full text-left retro-btn p-4 uppercase transition-all ${answers[currentIndex]?.text === option.text ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
+                  <span className="mr-3 font-bold">[{String.fromCharCode(65 + index)}]</span>
+                  {option.text}
+                </button>
+              ))}
             </div>
-
-            {/* 导航按钮 */}
             <div className="flex justify-between mt-8 pt-6 border-t border-[var(--color-primary)]/30">
-              <button
-                onClick={handlePrev}
-                disabled={isTransitioning || currentIndex === 0}
-                className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base ${
-                  currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)]'
-                }`}
-              >
-                {'<'} 上一页
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={isTransitioning}
-                className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)] transition-colors`}
-              >
-                {currentIndex + 1 === questions.length ? '完成' : '下一页'} {'>'}
+              <button onClick={() => currentIndex > 0 && setCurrentIndex(currentIndex - 1)} disabled={isTransitioning || isFinishing || currentIndex === 0} className="retro-btn px-4 py-2 uppercase">{'<'} PREV</button>
+              <button onClick={handleNext} disabled={isTransitioning || isFinishing} className="retro-btn px-4 py-2 uppercase">
+                {currentIndex + 1 === questions.length ? 'FINISH' : 'NEXT'} {'>'}
               </button>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { calculateResult } from '../utils/calculateResult.js'
 
 export default function LoadingScreen({ answers, onComplete }) {
   const [progress, setProgress] = useState(0)
-  const [currentStatus, setCurrentStatus] = useState('ANALYZING CODE SMELLS...')
+  const [currentStatus, setCurrentStatus] = useState('BOOTING ANALYZER...')
 
   const statusList = [
     'ANALYZING CODE SMELLS...',
@@ -14,15 +14,12 @@ export default function LoadingScreen({ answers, onComplete }) {
   ]
 
   useEffect(() => {
-    // 模拟计算过程
     let currentProgress = 0
     const progressTimer = setInterval(() => {
-      currentProgress += Math.floor(Math.random() * 15) + 5
+      currentProgress += Math.floor(Math.random() * 8) + 2
       if (currentProgress >= 100) {
         currentProgress = 100
         clearInterval(progressTimer)
-        
-        // 计算真实结果
         setTimeout(() => {
           const result = calculateResult(answers)
           onComplete(result)
@@ -30,49 +27,59 @@ export default function LoadingScreen({ answers, onComplete }) {
       }
       setProgress(currentProgress)
       
-      // 更新状态文本
       const statusIndex = Math.min(
         Math.floor((currentProgress / 100) * statusList.length),
         statusList.length - 1
       )
       setCurrentStatus(statusList[statusIndex])
-    }, 300)
+    }, 200)
 
     return () => clearInterval(progressTimer)
   }, [answers, onComplete])
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-      <div className="max-w-md w-full text-center retro-card p-8">
-        <div className="mb-8">
-          <div className="text-4xl md:text-6xl text-[var(--color-primary)] mb-4 animate-pulse glow-text">
-            {/* 终端加载动画 */}
-            <span className="inline-block animate-spin">/</span>
-            <span className="inline-block animate-spin delay-75">-</span>
-            <span className="inline-block animate-spin delay-150">\</span>
-            <span className="inline-block animate-spin delay-300">|</span>
+      {/* 恢复经典正方形卡片布局 */}
+      <div className="max-w-md w-full text-center retro-card p-8 md:p-12 animate-fade-in shadow-[0_0_30px_rgba(255,153,0,0.2)]">
+        <div className="mb-10">
+          <div className="text-5xl md:text-7xl text-[var(--color-primary)] mb-6 glow-text font-mono flex justify-center gap-3">
+             {['/', '-', '\\', '|'].map((char, i) => (
+               <span key={i} className="animate-spin" style={{ animationDuration: '0.8s', animationDelay: `${i * 0.2}s` }}>{char}</span>
+             ))}
           </div>
-          <h2 className="text-2xl font-bold text-[var(--color-primary)] mb-2 uppercase tracking-widest glow-text">
-            SYSTEM PROCESSING
+          <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-primary)] mb-4 tracking-tighter uppercase glow-text">
+            ANALYZER ACTIVE
           </h2>
-          <p className="text-[var(--color-accent-cyan)] h-6 text-sm uppercase tracking-wider">
+          <div className="text-[var(--color-accent-cyan)] text-sm uppercase h-6 tracking-widest font-bold">
             {'>'} {currentStatus} <span className="animate-blink">_</span>
-          </p>
+          </div>
         </div>
 
         {/* 进度条 */}
-        <div className="w-full bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] h-6 p-[2px] mb-4">
+        <div className="w-full bg-black border-2 border-[var(--color-primary)] h-8 p-1 mb-6 relative">
           <div
-            className="bg-[var(--color-primary)] h-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(255,153,0,0.8)]"
+            className="bg-[var(--color-primary)] h-full transition-all duration-300 shadow-[0_0_20px_var(--color-primary)]"
             style={{ width: `${progress}%` }}
           />
+          <div className="absolute inset-0 flex items-center justify-center text-sm font-bold mix-blend-difference text-white font-mono">
+            {progress}%
+          </div>
         </div>
         
-        {/* 进度数字 */}
-        <div className="text-3xl font-bold text-[var(--color-primary)] glow-text">
-          {progress}%
+        <div className="text-[var(--color-text-muted)] text-[10px] uppercase tracking-[0.2em] opacity-50">
+          Neural Processing in Progress
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+      `}</style>
     </div>
   )
 }
