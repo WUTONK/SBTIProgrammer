@@ -49,11 +49,8 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center px-4 py-8 overflow-y-auto">
-      {/* 顶部弹性占位符：在内容少时占据空间将内容推向中间，但在内容多时允许内容向上撑开或保持顶部位置 */}
-      <div className="flex-none h-[15vh] md:h-[20vh]"></div>
-      
-      <div className="max-w-2xl w-full flex-1">
+    <div className="flex-1 flex flex-col items-center justify-start pt-[8vh] md:pt-[12vh] px-4 pb-8">
+      <div className="max-w-2xl w-full">
         {/* 进度条 */}
         <div className="mb-8 retro-card p-4">
           <div className="flex justify-between text-[var(--color-primary)] mb-2 uppercase tracking-widest text-sm">

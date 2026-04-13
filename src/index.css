@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Fusion Pixel', 'VT323', 'Share Tech Mono', 'Courier New', monospace;
+  --font-mono: 'Fusion Pixel', 'VT323', 'Share Tech Mono', 'Courier New', monospace;
+}
+
+@font-face {
+  font-family: 'Fusion Pixel';
+  src: url('/fonts/fusion-pixel-12px-monospaced-zh_hans.otf.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --color-primary: #ff9900; /* EVA Amber/Orange */
   --color-primary-dark: #cc7a00;
@@ -18,7 +30,7 @@
 }
 
 body {
-  font-family: 'VT323', 'Share Tech Mono', 'Courier New', monospace;
+  font-family: 'Fusion Pixel', 'VT323', 'Share Tech Mono', 'Courier New', monospace;
   background-color: var(--color-bg-dark);
   color: var(--color-text);
   min-height: 100vh;

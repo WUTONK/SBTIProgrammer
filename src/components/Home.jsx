@@ -17,7 +17,7 @@ export default function Home({ onStart }) {
             <span className="ml-auto text-xs glow-text">CMD64.EXE</span>
           </div>
           
-          <div className="mb-8">
+          <div className="mb-8" style={{ paddingLeft: '1ch', paddingRight: '1ch' }}>
             <p className="text-[var(--color-primary)] text-sm mb-4">
               C:\&gt; RUN PROGRAMMER_SBTI.EXE
             </p>
@@ -30,13 +30,15 @@ export default function Home({ onStart }) {
           </div>
 
           <div className="border-t border-[var(--color-primary)]/30 pt-6">
-            <p className="text-[var(--color-primary)] text-base leading-relaxed">
-              &gt; INITIALIZING SYSTEM... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
-              &gt; LOADING PERSONALITY MODULES... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
-              &gt; READY TO ANALYZE PROGRAMMING HABITS.<br/>
-              <br/>
-              DISCOVER YOUR UNIQUE <span className="glow-text-cyan font-bold">DEVELOPER ARCHETYPE</span> IN 2 MINUTES.
-            </p>
+            <div style={{ paddingLeft: '1ch', paddingRight: '1ch' }}>
+              <p className="text-[var(--color-primary)] text-base leading-relaxed">
+                &gt; INITIALIZING SYSTEM... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
+                &gt; LOADING PERSONALITY MODULES... <span className="text-[var(--color-accent-cyan)]">OK</span><br/>
+                &gt; READY TO ANALYZE PROGRAMMING HABITS.<br/>
+                <br/>
+                DISCOVER YOUR UNIQUE <span className="glow-text-cyan font-bold">DEVELOPER ARCHETYPE</span> IN 2 MINUTES.
+              </p>
+            </div>
           </div>
         </div>
 
