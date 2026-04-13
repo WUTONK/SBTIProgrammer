@@ -1,11 +1,21 @@
 import { useState } from 'react'
 import { questions } from '../data/questions.js'
+import PunchedTape from './PunchedTape.jsx'
 
 export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answers, setAnswers }) {
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   const currentQuestion = questions[currentIndex]
   const progressPercentage = Math.round((currentIndex / questions.length) * 100)
+
+  const handleJump = (index) => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setCurrentIndex(index)
+      setIsTransitioning(false)
+    }, 300)
+  }
 
   const handleSelect = (option) => {
     if (isTransitioning) return
@@ -49,83 +59,98 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center px-4 py-8 overflow-y-auto">
-      {/* 顶部弹性占位符：在内容少时占据空间将内容推向中间，但在内容多时允许内容向上撑开或保持顶部位置 */}
-      <div className="flex-none h-[15vh] md:h-[20vh]"></div>
-      
-      <div className="max-w-2xl w-full flex-1">
-        {/* 进度条 */}
-        <div className="mb-8 retro-card p-4">
-          <div className="flex justify-between text-[var(--color-primary)] mb-2 uppercase tracking-widest text-sm">
-            <span>{'>'} QUERY {currentIndex + 1}/{questions.length}</span>
-            <span className="glow-text">{progressPercentage}%</span>
-          </div>
-          <div className="w-full bg-[var(--color-bg-dark)] border border-[var(--color-primary)] h-4 p-[2px]">
-            <div
-              className="bg-[var(--color-primary)] h-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(255,153,0,0.8)]"
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-        </div>
+    <div className="flex-1 flex flex-col w-full h-full overflow-y-auto overflow-x-hidden">
+      {/* 1. 顶部功能区：打孔纸带系统 */}
+      <div className="flex-none pt-4 flex justify-center">
+        <PunchedTape 
+          currentIndex={currentIndex}
+          answers={answers}
+          totalQuestions={questions.length}
+          onJump={handleJump}
+        />
+      </div>
 
-        {/* 题目卡片 */}
-        <div
-          className={`retro-card p-6 md:p-8 mb-6 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
-        >
-          {/* 维度标签 */}
-          <div className="flex items-center mb-6 border-b border-[var(--color-primary)] pb-2">
-            <span className="inline-block text-sm text-[var(--color-bg-dark)] bg-[var(--color-primary)] px-2 py-1 uppercase font-bold tracking-widest shadow-[0_0_10px_rgba(255,153,0,0.5)]">
-              DIMENSION: {currentQuestion.dimension}
-            </span>
-            <span className="ml-auto animate-blink text-[var(--color-primary)] text-xl">_</span>
-          </div>
+      {/* 2. 锚点间距 (Anchor Spacer)
+          确保起始位置固定，防止题目切换时产生跳动。
+      */}
+      <div className="flex-none h-[20vh] md:h-[25vh]"></div>
 
-          <h2 className="text-xl md:text-3xl font-bold text-[var(--color-primary)] mb-8 leading-relaxed glow-text uppercase">
-            {currentQuestion.text}
-          </h2>
-
-          {/* 选项 */}
-          <div className="space-y-4">
-            {currentQuestion.options.map((option, index) => {
-              const isSelected = answers[currentIndex]?.text === option.text;
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleSelect(option)}
-                  disabled={isTransitioning}
-                  className={`w-full text-left retro-btn p-4 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed group uppercase tracking-wider text-base md:text-lg ${
-                    isSelected 
-                      ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' 
-                      : 'text-[var(--color-primary)]'
-                  }`}
-                >
-                  <span className={`${isSelected ? 'text-[var(--color-bg-dark)]' : 'text-[var(--color-accent-cyan)] group-hover:text-[var(--color-bg-dark)]'} mr-3 font-bold`}>
-                    [{String.fromCharCode(65 + index)}]
-                  </span>
-                  {option.text}
-                </button>
-              );
-            })}
+      {/* 3. 核心答题区域 */}
+      <div className="flex-none flex flex-col items-center px-4 pb-20">
+        <div className="max-w-2xl w-full">
+          {/* 进度条 */}
+          <div className="mb-8 retro-card p-4">
+            <div className="flex justify-between text-[var(--color-primary)] mb-2 uppercase tracking-widest text-sm">
+              <span>{'>'} QUERY {currentIndex + 1}/{questions.length}</span>
+              <span className="glow-text">{progressPercentage}%</span>
+            </div>
+            <div className="w-full bg-[var(--color-bg-dark)] border border-[var(--color-primary)] h-4 p-[2px]">
+              <div
+                className="bg-[var(--color-primary)] h-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(255,153,0,0.8)]"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
           </div>
 
-          {/* 导航按钮 */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-[var(--color-primary)]/30">
-            <button
-              onClick={handlePrev}
-              disabled={isTransitioning || currentIndex === 0}
-              className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base ${
-                currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)]'
-              }`}
-            >
-              {'<'} 上一页
-            </button>
-            <button
-              onClick={handleNext}
-              disabled={isTransitioning}
-              className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)] transition-colors`}
-            >
-              {currentIndex + 1 === questions.length ? '完成' : '下一页'} {'>'}
-            </button>
+          {/* 题目卡片 */}
+          <div
+            className={`retro-card p-6 md:p-8 mb-6 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+          >
+            {/* 维度标签 */}
+            <div className="flex items-center mb-6 border-b border-[var(--color-primary)] pb-2">
+              <span className="inline-block text-sm text-[var(--color-bg-dark)] bg-[var(--color-primary)] px-2 py-1 uppercase font-bold tracking-widest shadow-[0_0_10px_rgba(255,153,0,0.5)]">
+                DIMENSION: {currentQuestion.dimension}
+              </span>
+              <span className="ml-auto animate-blink text-[var(--color-primary)] text-xl">_</span>
+            </div>
+
+            <h2 className="text-xl md:text-3xl font-bold text-[var(--color-primary)] mb-8 leading-relaxed glow-text uppercase">
+              {currentQuestion.text}
+            </h2>
+
+            {/* 选项 */}
+            <div className="space-y-4">
+              {currentQuestion.options.map((option, index) => {
+                const isSelected = answers[currentIndex]?.text === option.text;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => handleSelect(option)}
+                    disabled={isTransitioning}
+                    className={`w-full text-left retro-btn p-4 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed group uppercase tracking-wider text-base md:text-lg ${
+                      isSelected 
+                        ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' 
+                        : 'text-[var(--color-primary)]'
+                    }`}
+                  >
+                    <span className={`${isSelected ? 'text-[var(--color-bg-dark)]' : 'text-[var(--color-accent-cyan)] group-hover:text-[var(--color-bg-dark)]'} mr-3 font-bold`}>
+                      [{String.fromCharCode(65 + index)}]
+                    </span>
+                    {option.text}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* 导航按钮 */}
+            <div className="flex justify-between mt-8 pt-6 border-t border-[var(--color-primary)]/30">
+              <button
+                onClick={handlePrev}
+                disabled={isTransitioning || currentIndex === 0}
+                className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base ${
+                  currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)]'
+                }`}
+              >
+                {'<'} 上一页
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={isTransitioning}
+                className={`retro-btn px-4 py-2 md:px-6 md:py-3 uppercase text-sm md:text-base hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)] transition-colors`}
+              >
+                {currentIndex + 1 === questions.length ? '完成' : '下一页'} {'>'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
