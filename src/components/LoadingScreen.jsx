@@ -14,9 +14,14 @@ export default function LoadingScreen({ answers, onComplete }) {
   ]
 
   useEffect(() => {
+    const totalTime = 5000 // 5 seconds
+    const intervalTime = 100
+    const steps = totalTime / intervalTime
+    const increment = 100 / steps
+
     let currentProgress = 0
     const progressTimer = setInterval(() => {
-      currentProgress += Math.floor(Math.random() * 8) + 2
+      currentProgress += increment
       if (currentProgress >= 100) {
         currentProgress = 100
         clearInterval(progressTimer)
@@ -25,61 +30,63 @@ export default function LoadingScreen({ answers, onComplete }) {
           onComplete(result)
         }, 500)
       }
-      setProgress(currentProgress)
+      setProgress(Math.floor(currentProgress))
       
       const statusIndex = Math.min(
         Math.floor((currentProgress / 100) * statusList.length),
         statusList.length - 1
       )
       setCurrentStatus(statusList[statusIndex])
-    }, 200)
+    }, intervalTime)
 
     return () => clearInterval(progressTimer)
   }, [answers, onComplete])
 
+  // 优化后的 Spinner：单个字符循环
+  const [spinnerIndex, setSpinnerIndex] = useState(0)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSpinnerIndex(prev => (prev + 1) % 4)
+    }, 150)
+    return () => clearInterval(timer)
+  }, [])
+
+  const spinnerChars = ['/', '-', '\\', '|']
+
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-      {/* 恢复经典正方形卡片布局 */}
-      <div className="max-w-md w-full text-center retro-card p-8 md:p-12 animate-fade-in shadow-[0_0_30px_rgba(255,153,0,0.2)]">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 relative overflow-hidden">
+      {/* 核心终端卡片 */}
+      <div className="max-w-md w-full text-center retro-card p-8 md:p-12 bg-[var(--color-bg-card)] shadow-[0_0_50px_rgba(255,153,0,0.3)] relative z-10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-10 overflow-hidden -translate-y-[2px]">
+          <div className="w-full h-2 bg-black mt-2 shadow-[inset_0_0_10px_var(--color-primary)]"></div>
+          <div className="absolute inset-0 bg-[var(--color-primary)] opacity-40"></div>
+          <div className="w-full h-full bg-gradient-to-b from-[var(--color-primary)] to-transparent opacity-20"></div>
+        </div>
+
         <div className="mb-10">
-          <div className="text-5xl md:text-7xl text-[var(--color-primary)] mb-6 glow-text font-mono flex justify-center gap-3">
-             {['/', '-', '\\', '|'].map((char, i) => (
-               <span key={i} className="animate-spin" style={{ animationDuration: '0.8s', animationDelay: `${i * 0.2}s` }}>{char}</span>
-             ))}
+          <div className="text-7xl text-[var(--color-primary)] mb-6 glow-text font-mono h-20 flex items-center justify-center">
+             {spinnerChars[spinnerIndex]}
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-primary)] mb-4 tracking-tighter uppercase glow-text">
-            ANALYZER ACTIVE
+          <h2 className="text-2xl font-bold text-[var(--color-primary)] mb-4 tracking-widest uppercase glow-text">
+            CORE_ANALYZER_ACTIVE
           </h2>
           <div className="text-[var(--color-accent-cyan)] text-sm uppercase h-6 tracking-widest font-bold">
             {'>'} {currentStatus} <span className="animate-blink">_</span>
           </div>
         </div>
 
+
         {/* 进度条 */}
-        <div className="w-full bg-black border-2 border-[var(--color-primary)] h-8 p-1 mb-6 relative">
+        <div className="w-full bg-black border-2 border-[var(--color-primary)] h-8 p-1 relative">
           <div
             className="bg-[var(--color-primary)] h-full transition-all duration-300 shadow-[0_0_20px_var(--color-primary)]"
             style={{ width: `${progress}%` }}
           />
           <div className="absolute inset-0 flex items-center justify-center text-sm font-bold mix-blend-difference text-white font-mono">
-            {progress}%
+            {progress.toString().padStart(3, '0')}%
           </div>
         </div>
-        
-        <div className="text-[var(--color-text-muted)] text-[10px] uppercase tracking-[0.2em] opacity-50">
-          Neural Processing in Progress
-        </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-      `}</style>
     </div>
   )
 }

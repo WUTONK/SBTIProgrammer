@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export default function PunchedTape({ currentIndex, answers, totalQuestions, onJump, isFalling }) {
+export default function PunchedTape({ currentIndex, answers, totalQuestions, onJump, isFalling, isShaking }) {
   const [lastAction, setLastAction] = useState({ type: null, timestamp: 0 });
   const prevAnswersRef = useRef([]);
 
@@ -42,9 +42,10 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
         </div>
       </div>
 
-      {/* 2. 纸带本体 - 动画由父组件容器通过 isFalling 结合裁剪区域控制 */}
-      <div className={`relative transition-all duration-[1000ms] ease-in-out
-        ${isFalling ? 'translate-y-[45vh] opacity-0 scale-y-110 blur-[1px]' : 'translate-y-0 opacity-100'}`}>
+      {/* 2. 纸带本体 - 增加抖动和受控下坠 */}
+      <div className={`relative transition-all 
+        ${isShaking ? 'animate-shake' : ''}
+        ${isFalling ? 'translate-y-[60vh] opacity-0 scale-y-110 blur-[1px] duration-[800ms] ease-in' : 'translate-y-0 opacity-100 duration-[1000ms] ease-in-out'}`}>
         
         <div className="relative bg-[#d1c4a9] text-black p-2 font-mono text-[10px] md:text-xs shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#b3a68c]">
           <div className="absolute -left-1 top-0 bottom-0 w-1 flex flex-col justify-around">
@@ -61,7 +62,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
                   return (
                     <div 
                       key={colIdx}
-                      onClick={() => !isFalling && onJump(qIdx)}
+                      onClick={() => !isFalling && !isShaking && onJump(qIdx)}
                       className={`w-3 h-3 border-2 transition-colors flex items-center justify-center
                         ${answered ? 'bg-black border-black' : 'bg-transparent border-black/30'}
                         ${current ? 'ring-2 ring-red-500 animate-pulse' : ''}`}
@@ -92,6 +93,14 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
       )}
 
       <style jsx>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-2px) rotate(-0.5deg); }
+          75% { transform: translateX(2px) rotate(0.5deg); }
+        }
+        .animate-shake {
+          animation: shake 0.1s infinite;
+        }
         @keyframes correct-slide {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
