@@ -171,9 +171,10 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
           <div className="flex flex-col items-center gap-3">
             <div className="w-24 h-24 sm:w-28 sm:h-28 border border-[var(--color-primary)] p-1 relative z-[60]">
               <img 
-                src={`${import.meta.env.BASE_URL}avatar/Linus.png`} 
+                src={`${import.meta.env.BASE_URL}avatar/${role}.png`} 
                 alt={role} 
                 className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = `${import.meta.env.BASE_URL}avatar/Linus.png` }} 
               />
             </div>
             <div className="text-center">
