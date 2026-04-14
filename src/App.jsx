@@ -57,12 +57,14 @@ export default function App() {
   }, [])
 
   const handleJumpToQuestion = useCallback((index) => {
+    setUserName((n) => (n && String(n).trim()) || 'GUEST')
     setAnswers(answers.slice(0, index))
     setQuizIndex(index)
     setCurrentScreen(SCREENS.QUIZ)
   }, [answers])
 
   const handlePreviewResult = useCallback((resultType) => {
+    setUserName((n) => (n && String(n).trim()) || 'GUEST')
     setResult({
       typeCode: resultType,
       ...archetypes[resultType],

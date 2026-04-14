@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import * as htmlToImage from 'html-to-image'
 import ResultCard from './ResultCard'
-import { archetypes } from '../data/archetypes.js'
 
 export default function Result({ result, onRestart, userName, desktopLayoutMode }) {
   const cardRef = useRef(null)

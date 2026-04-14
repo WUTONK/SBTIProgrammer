@@ -34,6 +34,7 @@ const Divider = ({ title, noPadding = false }) => (
 const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId, layoutMode = 'A', tags = [] }, ref) => {
   const dim1 = code[0]; const dim2 = code[1]; const dim3 = code[2]; const dim4 = code[3];
   const dimensions = [dimensionData.dim1[dim1], dimensionData.dim2[dim2], dimensionData.dim3[dim3], dimensionData.dim4[dim4]];
+  const displayUserName = (userName != null && String(userName).trim()) || 'GUEST'
 
   const renderHeader = () => (
     <div className="flex justify-between items-start border-b border-dashed border-[var(--color-primary)] pb-3 mb-4">
@@ -42,7 +43,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
           <div className="w-3 h-3 bg-[var(--color-primary)] animate-pulse mt-0.5"></div>
           <span className="text-sm font-bold tracking-widest" style={{ textShadow: '0 0 5px #ff9900' }}>SYS.ID: {code}</span>
         </div>
-        {userName && <div className="text-xs font-bold tracking-widest ml-5 opacity-90" style={{ textShadow: '0 0 3px #ff9900' }}>USER: {userName}</div>}
+        <div className="text-xs font-bold tracking-widest ml-5 opacity-90" style={{ textShadow: '0 0 3px #ff9900' }}>USER: {displayUserName}</div>
       </div>
       <div className="text-xs text-[var(--color-accent-cyan)] mt-1" style={{ textShadow: '0 0 5px #00ffff' }}>VERIFIED</div>
     </div>
