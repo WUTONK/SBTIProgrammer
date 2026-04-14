@@ -78,6 +78,7 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
           code={displayResult.typeCode} 
           title={displayResult.name || displayResult.typeName} 
           description={displayResult.description} 
+          tags={displayResult.tags}
           subDimensions={displayResult.subDimensions}
           userName={userName}
           role={displayResult.role}

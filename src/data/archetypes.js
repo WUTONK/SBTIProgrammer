@@ -1,14 +1,15 @@
 export const archetypes = {
   OSTP: {
     role: 'Donald Knuth (高德纳)',
-    avatarId: 'Linus', // 目前暂无 Knuth 头像，回退到默认
+    avatarId: 'Donald_Knuth',
     name: '上古神明',
     description: '你写代码的严谨程度令人发指。为了排版一本关于算法的书，你顺手发明了TeX排版系统。你认为使用现代IDE是对编程的亵渎，只有在纸上推演过的算法才配运行。',
     tags: ['严谨发指', '顺手发明TeX', '纸上推演', '拒绝现代IDE'],
   },
+
   OITP: {
     role: 'Tim Berners-Lee (蒂姆·伯纳斯-李)',
-    avatarId: 'Linus',
+    avatarId: 'Tim_Berners-Lee',
     name: '天真架构师',
     description: '你怀揣着开放共享的崇高理想构建了万维网的基础架构，然后绝望地看着人类利用你发明的超文本协议在网上互相谩骂和分享抽象的猫咪视频。',
     tags: ['万维网之父', '开放共享', '理想主义', '绝望的架构师'],
@@ -36,7 +37,7 @@ export const archetypes = {
   },
   OITR: {
     role: 'Vitalik Buterin (维塔利克·布特林)',
-    avatarId: 'Linus',
+    avatarId: 'Vitalik_Buterin',
     name: '赛博魔法师',
     description: '你穿着独角兽T恤撰写改变金融规则的智能合约。你的代码在理论上是去中心化乌托邦的基石，但在实践中，执行一句“Hello World”可能需要花费用户50美元的Gas费。',
     tags: ['智能合约', '独角兽T恤', '去中心化', '高昂Gas费'],
@@ -57,7 +58,7 @@ export const archetypes = {
   },
   CSTP: {
     role: 'Edsger W. Dijkstra (艾兹赫尔·戴克斯特拉)',
-    avatarId: 'Edsger_W_Dijkstra',
+    avatarId: 'Edsger_W-Dijkstra',
     name: '学术清教徒',
     description: '在你的世界里，使用GOTO语句不仅是技术错误，更是道德败坏。你认为所有不精通离散数学的人都不配被称为程序员，代码应该像数学证明一样优美且绝对封闭。',
     tags: ['抵制GOTO', '离散数学', '代码即证明', '学术清教徒'],
@@ -71,14 +72,15 @@ export const archetypes = {
   },
   CSPP: {
     role: 'John Carmack (约翰·卡马克)',
-    avatarId: 'Linus',
+    avatarId: 'John_Carmack',
     name: '裸机压榨狂',
+
     description: '你能在连计算器都跑不动的破烂硬件上榨取出120帧的3D画面。你对内存底层操作的理解已经达到了分子级别，你的代码是封闭的艺术品，也是现代游戏引擎的祖坟。',
     tags: ['硬件压榨', '120帧3D', '分子级内存', '引擎祖师爷'],
   },
   CIPP: {
     role: 'Satoshi Nakamoto (中本聪)',
-    avatarId: 'Linus',
+    avatarId: 'Satoshi_Nakamoto',
     name: '幽灵缔造者',
     description: '你发布了一份颠覆全球金融体系的白皮书，提交了完美无瑕的C++创世代码，然后彻底从互联网上蒸发，留下无数狂徒在你的代码遗迹上建立起价值万亿的疯狂赌场。',
     tags: ['白皮书', '创世代码', '人间蒸发', '万亿赌场'],
@@ -94,12 +96,12 @@ export const archetypes = {
     role: 'Paul Allen (保罗·艾伦)',
     avatarId: 'Paul_Allen',
     name: '深藏功与名',
-    description: '你总是在幕后默默搞定最底层的汇编代码和硬件兼容性问题。你从不在乎自己的代码是否开源，只要它能转化为巨额财富，让你去购买游艇和投资航天项目就行。',
+    description: '你总是在幕后默默搞定最底层的汇编代码 and 硬件兼容性问题。你从不在乎自己的代码是否开源，只要它能转化为巨额财富，让你去购买游艇和投资航天项目就行。',
     tags: ['底层汇编', '硬件兼容', '巨额财富', '深藏功与名'],
   },
   CSPR: {
     role: '银行COBOL老兵 (群体缩影)',
-    avatarId: 'Linus',
+    avatarId: 'Macintosh_UWU',
     name: '上古死灵法师',
     description: '你独自维护着一套比你年龄还大的银行结算系统。系统每天都在报未知错误，但只要不彻底崩溃你就绝不重构。你无法被开除，因为你一旦离职，全球经济就会停摆。',
     tags: ['COBOL老兵', '拒绝重构', '无法开除', '经济命脉'],

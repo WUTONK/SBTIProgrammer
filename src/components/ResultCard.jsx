@@ -31,7 +31,7 @@ const Divider = ({ title, noPadding = false }) => (
   </div>
 );
 
-const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId, layoutMode = 'A' }, ref) => {
+const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId }, ref) => {
   const dim1 = code[0]; const dim2 = code[1]; const dim3 = code[2]; const dim4 = code[3];
   const dimensions = [dimensionData.dim1[dim1], dimensionData.dim2[dim2], dimensionData.dim3[dim3], dimensionData.dim4[dim4]];
 
@@ -59,7 +59,16 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
   const renderAvatar = () => (
     <div className="flex flex-col items-center gap-3">
       <div className="w-32 h-32 sm:w-36 sm:h-36 border-2 border-[var(--color-primary)] p-1 relative z-[60] bg-black shadow-[0_0_20px_rgba(255,153,0,0.2)]">
-        <img src={`./avatar/${avatarId || 'Linus'}.webp`} alt={role} className="w-full h-full object-cover" style={{ imageRendering: 'pixelated' }} onError={(e) => { e.target.src = './avatar/Linus.webp' }} />
+        <img 
+          src={`/avatar/${avatarId || 'Linus'}.webp`} 
+          alt={role} 
+          className="w-full h-full object-cover" 
+          style={{ imageRendering: 'pixelated' }} 
+          onError={(e) => { 
+            if (e.target.src.includes('Linus.webp')) return;
+            e.target.src = '/avatar/Linus.webp' 
+          }} 
+        />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[var(--color-primary)]/5 to-transparent opacity-30 animate-pulse"></div>
       </div>
       <div className="text-center mt-1"><div className="text-base sm:text-lg font-bold text-[var(--color-primary)] tracking-widest" style={{ textShadow: '0 0 8px #ff9900' }}>{role}</div></div>
@@ -110,7 +119,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
     <>
       <Divider title="[ 终端链接 | SYSTEM_LINK ]" />
       <div className="flex flex-col items-center mb-2 mt-2">
-        <div className="bg-white p-1.5 relative z-[60]"><QRCodeSVG value="https://wutonk.github.io/SBTIProgrammer/" size={64} bgColor="#ffffff" fgColor="#000000" level="L" /></div>
+        <div className="bg-white p-1.5 relative z-[60]"><QRCodeSVG value="https://sbti.wutonk.xyz" size={64} bgColor="#ffffff" fgColor="#000000" level="L" /></div>
         <div className="text-[10px] tracking-[0.3em] opacity-80 mt-2">SCAN_TO_INITIATE</div>
       </div>
       <div className="flex flex-col items-center border-t border-dashed border-[var(--color-primary)] pt-4 mt-6">

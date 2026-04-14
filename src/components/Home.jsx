@@ -4,6 +4,7 @@ import { archetypes } from '../data/archetypes.js';
 export default function Home({ onStart }) {
   const [showGallery, setShowGallery] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 relative">
@@ -58,18 +59,27 @@ export default function Home({ onStart }) {
             <label className="text-[var(--color-primary)] text-sm uppercase">
               {'>'} ENTER_NAME (OPTIONAL):
             </label>
-            <div className="flex items-center w-full border border-[var(--color-primary)] bg-[var(--color-bg-card)] px-3 py-2 shadow-[inset_0_0_10px_rgba(255,153,0,0.1)] focus-within:shadow-[inset_0_0_15px_rgba(255,153,0,0.3)] transition-shadow">
+            <div className="flex items-center w-full border border-[var(--color-primary)] bg-[var(--color-bg-card)] px-3 py-2 shadow-[inset_0_0_10px_rgba(255,153,0,0.1)] focus-within:shadow-[inset_0_0_15px_rgba(255,153,0,0.3)] transition-shadow relative">
               <span className="text-[var(--color-primary)] mr-2">{'>'}</span>
-              <input
-                type="text"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                className="bg-transparent border-none outline-none text-[var(--color-primary)] w-full uppercase font-bold placeholder-[var(--color-primary)] placeholder-opacity-30"
-                placeholder="GUEST"
-                maxLength={16}
-                spellCheck="false"
-              />
-              <span className="animate-blink text-[var(--color-primary)] ml-1">_</span>
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  className="bg-transparent border-none outline-none text-[var(--color-primary)] w-full uppercase font-bold"
+                  placeholder=""
+                  maxLength={16}
+                  spellCheck="false"
+                />
+                {!userName && !isFocused && (
+                  <div className="absolute left-0 top-0 pointer-events-none flex items-center h-full">
+                    <span className="text-[var(--color-primary)] opacity-30 uppercase font-bold">GUEST</span>
+                    <span className="animate-blink text-[var(--color-primary)] ml-1">_</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -89,7 +99,7 @@ export default function Home({ onStart }) {
           </button>
 
           <p className="text-[var(--color-text-muted)] text-xs mt-2">
-            V1.0.0 | PURE FRONTEND | NO TRACKING
+            V1.0.0 | 纯前端—无上传 | WUTONK@2026
           </p>
         </div>
       </div>
