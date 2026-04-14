@@ -137,9 +137,10 @@ export default function Home({ onStart }) {
       {/* Gallery Modal */}
       {showGallery && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4">
-          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-6xl max-h-[90vh] flex flex-col bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] overflow-hidden shadow-[0_0_50px_rgba(255,153,0,0.2)] animate-fade-in relative">
+          {/* 关键修复 1：将 max-h-[90vh] 改为固定的 h-[85vh]，并去掉了可能干扰的 overflow-hidden */}
+          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-6xl h-[85vh] flex flex-col bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] shadow-[0_0_50px_rgba(255,153,0,0.2)] animate-fade-in relative">
             
-            {/* Terminal Header */}
+            {/* Terminal Header (保持不变) */}
             <div className="flex justify-between items-center p-2 md:p-3 border-b-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 relative z-10 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5 ml-1 mr-2 md:ml-2 md:mr-4">
@@ -159,8 +160,8 @@ export default function Home({ onStart }) {
               </button>
             </div>
             
-            {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,153,0,0.03)_50%)] bg-[length:100%_4px]">
+            {/* Content Area - 关键修复 2：加了 h-0 min-h-0 强制接管高度产生滚动条 */}
+            <div className="flex-1 h-0 min-h-0 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,153,0,0.03)_50%)] bg-[length:100%_4px]">
               <div className="mx-auto">
                 <div className="flex items-center gap-3 mb-8">
                   <h2 className="text-xl md:text-2xl font-bold text-[var(--color-primary)] tracking-widest glow-text uppercase" style={{ textShadow: '0 0 10px #ff9900' }}>
@@ -224,18 +225,20 @@ export default function Home({ onStart }) {
             </div>
             
             {/* Render Result Card */}
-            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex justify-center drop-shadow-2xl pb-8">
-              <ResultCard 
-                code={previewType} 
-                title={archetypes[previewType].name} 
-                description={archetypes[previewType].description} 
-                tags={archetypes[previewType].tags}
-                subDimensions={mockSubDimensions}
-                userName="SYS_ADMIN"
-                role={archetypes[previewType].role}
-                avatarId={archetypes[previewType].avatarId}
-                layoutMode="B"
-              />
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar drop-shadow-2xl pb-8">
+              <div className="flex justify-center">
+                <ResultCard 
+                  code={previewType} 
+                  title={archetypes[previewType].name} 
+                  description={archetypes[previewType].description} 
+                  tags={archetypes[previewType].tags}
+                  subDimensions={mockSubDimensions}
+                  userName="SYS_ADMIN"
+                  role={archetypes[previewType].role}
+                  avatarId={archetypes[previewType].avatarId}
+                  layoutMode="B"
+                />
+              </div>
             </div>
           </div>
         </div>

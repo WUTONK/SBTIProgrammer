@@ -6,24 +6,9 @@ import { archetypes } from '../data/archetypes.js'
 export default function Result({ result, onRestart, userName, desktopLayoutMode }) {
   const cardRef = useRef(null)
   const [isGenerating, setIsGenerating] = useState(false)
-  const [debugIndex, setDebugIndex] = useState(-1)
 
-  // 开发者模式：获取所有类型键名
-  const typeKeys = Object.keys(archetypes)
-  
-  // 当前显示的测试结果（如果启用了开发者模式，则覆盖）
-  const displayResult = debugIndex >= 0 
-    ? {
-        typeCode: typeKeys[debugIndex],
-        ...archetypes[typeKeys[debugIndex]],
-        subDimensions: {
-          CO1: 'H', CO2: 'M', CO3: 'L',
-          SI1: 'H', SI2: 'H', SI3: 'M',
-          TP1: 'L', TP2: 'M', TP3: 'H',
-          PR1: 'H', PR2: 'L', PR3: 'M'
-        }
-      }
-    : result
+  // 当前显示的测试结果
+  const displayResult = result
 
   const handleDownload = async () => {
     if (!cardRef.current) return
@@ -55,23 +40,11 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
     }
   }
 
-  const cycleDebug = () => {
-    setDebugIndex((prev) => (prev + 1) % typeKeys.length)
-  }
-
   if (!displayResult) return null
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 py-8 space-y-6 relative w-full min-h-full overflow-y-auto animate-mac-zoom-vertical-container">
-      <div className="w-full flex flex-col items-center space-y-6 animate-mac-zoom-vertical-content">
-        {/* 开发者调试按钮 */}
-        <button 
-          onClick={cycleDebug}
-          className="absolute top-4 right-4 text-[var(--color-text-muted)] text-xs border border-[var(--color-text-muted)] px-2 py-1 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors z-[110]"
-        >
-          [DEV: CYCLE_TYPE]
-        </button>
-
+    <div className="flex-1 flex flex-col items-center justify-start p-4 py-8 space-y-6 relative w-full min-h-full overflow-y-auto animate-mac-zoom-vertical-container">
+      <div className="w-full flex flex-col items-center space-y-6 animate-mac-zoom-vertical-content my-auto">
         {/* The Result Card to be captured */}
         <div className="flex justify-center w-full animate-slide-up flex-shrink-0">
           <ResultCard 
