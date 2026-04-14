@@ -101,14 +101,14 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
           50% { opacity: 1; transform: scale(1.1); }
         }
         @keyframes tapeWipeAnim {
-          0% { width: 0px; opacity: 0.8; }
-          15% { width: 0px; opacity: 0.8; }
-          50% { width: 14px; opacity: 1; }
-          85% { width: 14px; opacity: 1; }
+          0% { width: 0px; opacity: 1; }
+          15% { width: 7px; opacity: 1; }
+          30% { width: 14px; opacity: 1; }
+          70% { width: 14px; opacity: 0.5; }
           100% { width: 14px; opacity: 0; }
         }
         .animate-tape-wipe {
-          animation: tapeWipeAnim 1s linear forwards;
+          animation: tapeWipeAnim 0.8s steps(1, end) forwards;
         }
         .animate-pixel-spark {
           animation: pixelSparkAnim 0.15s steps(1, end) forwards;
