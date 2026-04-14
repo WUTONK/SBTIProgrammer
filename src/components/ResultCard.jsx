@@ -76,22 +76,20 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
   );
 
   const renderTags = (noPadding = false) => (
-    <div className="flex flex-col gap-2" style={noPadding ? {} : { paddingLeft: '32px', paddingRight: '32px' }}>
-      <div className="flex items-center gap-2 mb-1">
-        <span className="text-[var(--color-accent-cyan)] font-bold text-xs tracking-wider opacity-80">性格标签 // TRAITS</span>
-      </div>
-      <div className="flex flex-wrap gap-2">
+    <>
+      <Divider title="[ 性格标签 ]" noPadding={noPadding} />
+      <div className="grid grid-cols-2 gap-2" style={noPadding ? {} : { paddingLeft: '32px', paddingRight: '32px' }}>
         {tags.map((tag, idx) => (
           <div 
             key={idx} 
-            className="border border-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2 py-1 text-[10px] font-bold text-[var(--color-primary)] text-center"
-            style={{ minWidth: '80px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            className="border border-[var(--color-primary)] text-[10px] font-bold text-[var(--color-primary)] flex items-center justify-center w-full"
+            style={{ height: '26px' }}
           >
             {tag}
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 
   const renderDimensions = (cols = 1) => (
@@ -189,12 +187,12 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
             <Divider title="[ 代表 ]" noPadding />
             {renderAvatar()}
             <div className="mt-4"><p className="text-[10px] leading-relaxed mb-3">{description}</p></div>
-            {renderTags(true)}
             {renderFooter()}
           </div>
           <div className="col-span-4 border-r border-dashed border-[var(--color-primary)]" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
             <Divider title="[ 纬度画像 ]" noPadding />
             {renderDimensions(1)}
+            {renderTags(true)}
           </div>
           <div className="col-span-5" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
             <Divider title="[ 详细子维度 ]" noPadding />
