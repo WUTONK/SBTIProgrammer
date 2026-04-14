@@ -23,7 +23,7 @@ export default function App() {
   const [quizIndex, setQuizIndex] = useState(0)
   const [skipLoading, setSkipLoading] = useState(false)
   const [useCrtCurve, setUseCrtCurve] = useState(false)
-  const [desktopLayoutMode, setDesktopLayoutMode] = useState('A')
+  const [desktopLayoutMode, setDesktopLayoutMode] = useState('B')
 
   const handleStart = useCallback((name) => {
     setUserName(name || 'GUEST')

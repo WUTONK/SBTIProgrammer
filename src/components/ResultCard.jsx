@@ -121,9 +121,9 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
   const containerClasses = `
     w-full bg-[var(--color-bg-dark)] border-4 border-[var(--color-primary)] p-5 relative overflow-hidden shadow-[0_0_30px_rgba(255,153,0,0.3)]
     transition-all duration-500
-    ${layoutMode === 'A' ? 'max-w-[400px] md:max-w-5xl' : ''}
-    ${layoutMode === 'B' ? 'max-w-[400px] md:max-w-7xl' : ''}
-    ${layoutMode === 'C' ? 'max-w-[400px] md:max-w-3xl' : ''}
+    ${layoutMode === 'A' ? 'max-w-[400px] lg:max-w-5xl' : ''}
+    ${layoutMode === 'B' ? 'max-w-[400px] lg:max-w-7xl' : ''}
+    ${layoutMode === 'C' ? 'max-w-[400px] lg:max-w-3xl' : ''}
   `;
 
   return (
@@ -133,8 +133,8 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
       <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-[var(--color-accent-cyan)]"></div>
       <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-[var(--color-accent-cyan)]"></div>
 
-      {/* 移动端展示: md:hidden 下完全还原之前的布局细节 */}
-      <div className="md:hidden">
+      {/* 移动端展示: lg:hidden 下完全还原之前的布局细节 */}
+      <div className="lg:hidden">
         {renderHeader()}
         {renderTitle()}
         <Divider title="[ 代表人物 | REPRESENTATIVE ]" />
@@ -149,7 +149,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
       </div>
 
       {/* 桌面端布局分支 */}
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         {layoutMode === 'A' && (
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-5 border-r border-dashed border-[var(--color-primary)] pr-8">

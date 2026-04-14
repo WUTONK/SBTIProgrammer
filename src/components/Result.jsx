@@ -62,7 +62,7 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
   if (!displayResult) return null
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start md:justify-center p-4 py-12 space-y-8 relative w-full min-h-full">
+    <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 py-8 space-y-6 relative w-full min-h-full">
       {/* 开发者调试按钮 */}
       <button 
         onClick={cycleDebug}
