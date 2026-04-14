@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 /**
  * 辅助组件：用于在像素网格中绘制单个“像素块”
@@ -17,8 +17,33 @@ const SpriteBlock = ({ x, y, w, h, bg, className = '' }) => (
 
 export default function PunchedTape({ currentIndex, answers, totalQuestions, onJump, isShaking, isFalling, tapeBodyRef }) {
   const [lastAction, setLastAction] = useState({ type: null, timestamp: 0 });
+  const [scrollState, setScrollState] = useState({ left: false, right: false });
   const prevAnswersRef = useRef([]);
   const scrollContainerRef = useRef(null);
+
+  const updateScrollIndicators = useCallback(() => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setScrollState({
+        left: scrollLeft > 10,
+        right: scrollLeft + clientWidth < scrollWidth - 10
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      updateScrollIndicators();
+      container.addEventListener('scroll', updateScrollIndicators);
+      // 同时监听窗口调整大小，以防容器宽度变化
+      window.addEventListener('resize', updateScrollIndicators);
+      return () => {
+        container.removeEventListener('scroll', updateScrollIndicators);
+        window.removeEventListener('resize', updateScrollIndicators);
+      };
+    }
+  }, [updateScrollIndicators]);
 
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -26,8 +51,10 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
       const columnWidth = 24; // 18px width + gap
       const targetScroll = currentIndex * columnWidth - container.offsetWidth / 2 + columnWidth / 2;
       container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+      // 滚动后稍等片刻再次更新状态，确保平滑滚动后的位置准确
+      setTimeout(updateScrollIndicators, 350);
     }
-  }, [currentIndex]);
+  }, [currentIndex, updateScrollIndicators]);
 
   useEffect(() => {
     const prevAnswers = prevAnswersRef.current;
@@ -52,7 +79,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
   const holeColor = 'var(--color-bg-dark)';
 
   return (
-    <div className="w-full relative py-4 px-4 flex justify-center">
+    <div className="w-full relative py-4 px-4 flex justify-center overflow-hidden">
       <style>{`
         @keyframes pixelSparkAnim {
           0% { opacity: 1; transform: scale(0.8); }
@@ -60,12 +87,35 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
           60% { opacity: 1; transform: scale(1); }
           100% { opacity: 0; transform: scale(1); }
         }
+        @keyframes arrowBreathing {
+          0%, 100% { opacity: 0.3; transform: scale(0.9); }
+          50% { opacity: 1; transform: scale(1.1); }
+        }
         .animate-pixel-spark {
           animation: pixelSparkAnim 0.15s steps(1, end) forwards;
+        }
+        .animate-arrow-breathing {
+          animation: arrowBreathing 1.5s ease-in-out infinite;
         }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
+
+      {/* 滚动提示箭头：左侧 */}
+      <div 
+        className={`absolute left-0 top-0 bottom-0 w-8 z-[70] pointer-events-none flex items-center justify-start pl-2 transition-opacity duration-300 ${scrollState.left && !isFalling ? 'opacity-60' : 'opacity-0'}`}
+        style={{ background: 'linear-gradient(to right, var(--color-bg-dark) 40%, transparent)' }}
+      >
+        <div className="w-2 h-3 bg-[var(--color-primary)]" style={{ clipPath: 'polygon(100% 0, 0 50%, 100% 100%)' }} />
+      </div>
+
+      {/* 滚动提示箭头：右侧 */}
+      <div 
+        className={`absolute right-0 top-0 bottom-0 w-8 z-[70] pointer-events-none flex items-center justify-end pr-2 transition-opacity duration-300 ${scrollState.right && !isFalling ? 'opacity-60' : 'opacity-0'}`}
+        style={{ background: 'linear-gradient(to left, var(--color-bg-dark) 40%, transparent)' }}
+      >
+        <div className="w-2 h-3 bg-[var(--color-primary)]" style={{ clipPath: 'polygon(0 0, 100% 50%, 0 100%)' }} />
+      </div>
 
       {/* 内部容器，保持打孔机和纸卡上下垂直居中对齐 */}
       <div className="flex flex-col items-center shrink-0">
@@ -161,12 +211,12 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
               border: '1px solid #C4B9A3'
             }}
           >
-            {/* 左侧垂直印刷文字 */}
+            {/* 左侧垂直印刷文字
             <div 
               className="absolute left-2 top-1/2 -translate-y-1/2 -rotate-90 text-[7px] font-bold tracking-widest opacity-70 origin-center whitespace-nowrap"
             >
               PROGRAMMER SBTI DATA CENTER &lt;wutonk.xyz&gt;
-            </div>
+            </div> */}
 
             {/* 顶部印刷文字 */}
             <div className="flex justify-between text-[11px] font-bold mb-3 tracking-widest uppercase opacity-80 pl-2">
