@@ -33,6 +33,7 @@ pnpm-debug.log*
 .npm/
 
 # Editor directories and files
+.history/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
