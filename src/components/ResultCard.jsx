@@ -31,7 +31,7 @@ const Divider = ({ title, noPadding = false }) => (
   </div>
 );
 
-const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId }, ref) => {
+const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId, layoutMode = 'A', tags = [] }, ref) => {
   const dim1 = code[0]; const dim2 = code[1]; const dim3 = code[2]; const dim4 = code[3];
   const dimensions = [dimensionData.dim1[dim1], dimensionData.dim2[dim2], dimensionData.dim3[dim3], dimensionData.dim4[dim4]];
 
@@ -72,6 +72,25 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[var(--color-primary)]/5 to-transparent opacity-30 animate-pulse"></div>
       </div>
       <div className="text-center mt-1"><div className="text-base sm:text-lg font-bold text-[var(--color-primary)] tracking-widest" style={{ textShadow: '0 0 8px #ff9900' }}>{role}</div></div>
+    </div>
+  );
+
+  const renderTags = (noPadding = false) => (
+    <div className="flex flex-col gap-2" style={noPadding ? {} : { paddingLeft: '32px', paddingRight: '32px' }}>
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-[var(--color-accent-cyan)] font-bold text-xs tracking-wider opacity-80">性格标签 // TRAITS</span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {tags.map((tag, idx) => (
+          <div 
+            key={idx} 
+            className="border border-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2 py-1 text-[10px] font-bold text-[var(--color-primary)] text-center"
+            style={{ minWidth: '80px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            {tag}
+          </div>
+        ))}
+      </div>
     </div>
   );
 
@@ -135,10 +154,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
 
   const containerClasses = `
     w-full bg-[var(--color-bg-dark)] border-4 border-[var(--color-primary)] p-5 relative overflow-hidden shadow-[0_0_30px_rgba(255,153,0,0.3)]
-    transition-all duration-500
-    ${layoutMode === 'A' ? 'max-w-[400px] lg:max-w-5xl' : ''}
-    ${layoutMode === 'B' ? 'max-w-[400px] lg:max-w-7xl' : ''}
-    ${layoutMode === 'C' ? 'max-w-[400px] lg:max-w-3xl' : ''}
+    transition-all duration-500 max-w-[400px] lg:max-w-7xl
   `;
 
   return (
@@ -155,7 +171,8 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
         <Divider title="[ 代表人物 | REPRESENTATIVE ]" />
         {renderAvatar()}
         <Divider title="[ 人格描述 | PERSONALITY ]" />
-        <div style={{ paddingLeft: '32px', paddingRight: '32px' }}><p className="text-xs leading-relaxed" style={{ textShadow: '0 0 2px #ff9900' }}>{description}</p></div>
+        <div style={{ paddingLeft: '32px', paddingRight: '32px' }}><p className="text-xs leading-relaxed mb-4" style={{ textShadow: '0 0 2px #ff9900' }}>{description}</p></div>
+        {renderTags(false)}
         <Divider title="[ 纬度画像 | DIMENSIONS ]" />
         <div style={{ paddingLeft: '32px', paddingRight: '32px' }}>{renderDimensions(1)}</div>
         <Divider title="[ 详细画像 | SUB-DIMENSIONS ]" />
@@ -163,68 +180,27 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
         {renderFooter()}
       </div>
 
-      {/* 桌面端布局分支 */}
+      {/* 桌面端布局: 仅保留 Mode B */}
       <div className="hidden lg:block">
-        {layoutMode === 'A' && (
-          <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-5 border-r border-dashed border-[var(--color-primary)]" style={{ paddingRight: '32px' }}>
-              {renderHeader()}
-              {renderTitle()}
-              <Divider title="[ 代表人物 ]" noPadding />
-              {renderAvatar()}
-              <Divider title="[ 人格描述 ]" noPadding />
-              <div style={{ paddingLeft: '8px' }}><p className="text-sm leading-relaxed">{description}</p></div>
-              {renderFooter()}
-            </div>
-            <div className="col-span-7" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
-              <Divider title="[ 纬度画像 | DIMENSIONS ]" noPadding />
-              {renderDimensions(1)}
-              <Divider title="[ 详细画像 | SUB-DIMENSIONS ]" noPadding />
-              {renderSubDimensions(2)}
-            </div>
-          </div>
-        )}
-
-        {layoutMode === 'B' && (
-          <div className="grid grid-cols-12 gap-0">
-            <div className="col-span-3 border-r border-dashed border-[var(--color-primary)]" style={{ paddingRight: '32px', paddingLeft: '16px' }}>
-              {renderHeader()}
-              {renderTitle()}
-              <Divider title="[ 代表 ]" noPadding />
-              {renderAvatar()}
-              <div className="mt-6"><p className="text-[10px] leading-relaxed">{description}</p></div>
-              {renderFooter()}
-            </div>
-            <div className="col-span-4 border-r border-dashed border-[var(--color-primary)]" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
-              <Divider title="[ 纬度画像 ]" noPadding />
-              {renderDimensions(1)}
-            </div>
-            <div className="col-span-5" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
-              <Divider title="[ 详细子维度 ]" noPadding />
-              {renderSubDimensions(2)}
-            </div>
-          </div>
-        )}
-
-        {layoutMode === 'C' && (
-          <div>
+        <div className="grid grid-cols-12 gap-0">
+          <div className="col-span-3 border-r border-dashed border-[var(--color-primary)]" style={{ paddingRight: '32px', paddingLeft: '16px' }}>
             {renderHeader()}
-            <div className="grid grid-cols-2 gap-8 mb-4">
-              <div>{renderTitle()}{renderAvatar()}</div>
-              <div className="flex items-center">
-                <div className="px-6 border-l-2 border-[var(--color-primary)]">
-                  <h3 className="text-lg font-bold mb-2 text-[var(--color-accent-cyan)]">[ PERSONALITY ]</h3>
-                  <p className="text-sm leading-relaxed">{description}</p>
-                </div>
-              </div>
-            </div>
-            <Divider title="[ 纬度画像 ]" noPadding />
-            <div className="px-6">{renderDimensions(2)}</div>
-            <Divider title="[ 详细画像 ]" noPadding />
-            <div className="px-6">{renderSubDimensions(3)}</div>
+            {renderTitle()}
+            <Divider title="[ 代表 ]" noPadding />
+            {renderAvatar()}
+            <div className="mt-4"><p className="text-[10px] leading-relaxed mb-3">{description}</p></div>
+            {renderTags(true)}
             {renderFooter()}
           </div>
-        )}
+          <div className="col-span-4 border-r border-dashed border-[var(--color-primary)]" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
+            <Divider title="[ 纬度画像 ]" noPadding />
+            {renderDimensions(1)}
+          </div>
+          <div className="col-span-5" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
+            <Divider title="[ 详细子维度 ]" noPadding />
+            {renderSubDimensions(2)}
+          </div>
+        </div>
       </div>
 
       <div className="absolute inset-0 pointer-events-none opacity-20 z-50" style={{ background: 'linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.5) 50%)', backgroundSize: '100% 4px' }}></div>

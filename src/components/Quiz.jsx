@@ -38,6 +38,29 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
     }, 300)
   }
 
+  const handlePrev = () => {
+    if (currentIndex > 0 && !isTransitioning && !isFinishing) {
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - 1)
+        setIsTransitioning(false)
+      }, 300)
+    }
+  }
+
+  const handleNext = () => {
+    if (isTransitioning || isFinishing) return
+    if (currentIndex + 1 < questions.length) {
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + 1)
+        setIsTransitioning(false)
+      }, 300)
+    } else {
+      triggerFinishSequence()
+    }
+  }
+
   const handleSelect = (option) => {
     if (isTransitioning || isFinishing) return
     const newAnswers = [...answers]
@@ -168,6 +191,24 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
                   {option.text}
                 </button>
               ))}
+            </div>
+
+            {/* 底部导航按钮组 - 增加 mt-5 (20px) 边距 */}
+            <div className="mt-8 flex gap-4 w-full">
+              <button
+                onClick={handlePrev}
+                disabled={currentIndex === 0 || isTransitioning || isFinishing}
+                className={`flex-1 retro-btn py-3 text-sm font-bold tracking-widest ${currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
+              >
+                {'<'} PREV_QUERY
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={isTransitioning || isFinishing}
+                className="flex-1 retro-btn py-3 text-sm font-bold tracking-widest"
+              >
+                {currentIndex === questions.length - 1 ? 'FINISH_TAPE >' : 'NEXT_QUERY >'}
+              </button>
             </div>
           </div>
         </div>

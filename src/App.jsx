@@ -23,7 +23,6 @@ export default function App() {
   const [quizIndex, setQuizIndex] = useState(0)
   const [skipLoading, setSkipLoading] = useState(false)
   const [useCrtCurve, setUseCrtCurve] = useState(false)
-  const [desktopLayoutMode, setDesktopLayoutMode] = useState('B')
 
   const handleStart = useCallback((name) => {
     setUserName(name || 'GUEST')
@@ -93,7 +92,7 @@ export default function App() {
       case SCREENS.LOADING:
         return <LoadingScreen answers={answers} onComplete={handleLoadingComplete} />
       case SCREENS.RESULT:
-        return <Result result={result} onRestart={handleRestart} userName={userName} desktopLayoutMode={desktopLayoutMode} />
+        return <Result result={result} onRestart={handleRestart} userName={userName} />
       default:
         return <Home onStart={handleStart} />
     }
@@ -118,8 +117,6 @@ export default function App() {
         setSkipLoading={setSkipLoading}
         useCrtCurve={useCrtCurve}
         setUseCrtCurve={setUseCrtCurve}
-        desktopLayoutMode={desktopLayoutMode}
-        setDesktopLayoutMode={setDesktopLayoutMode}
       />
     </div>
   )

@@ -62,7 +62,7 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
   if (!displayResult) return null
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 py-8 space-y-6 relative w-full min-h-full">
+    <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 py-8 space-y-6 relative w-full min-h-full overflow-y-auto">
       {/* 开发者调试按钮 */}
       <button 
         onClick={cycleDebug}
@@ -78,7 +78,6 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
           code={displayResult.typeCode} 
           title={displayResult.name || displayResult.typeName} 
           description={displayResult.description} 
-          tags={displayResult.tags}
           subDimensions={displayResult.subDimensions}
           userName={userName}
           role={displayResult.role}
@@ -87,7 +86,7 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
         />
       </div>
 
-      {/* 额外的占位边距，确保按钮不贴着卡片 */}
+      {/* 占位边距 */}
       <div className="h-5"></div>
 
       {/* Action Buttons */}
