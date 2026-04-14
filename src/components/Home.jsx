@@ -62,8 +62,20 @@ export default function Home({ onStart }) {
         </div>
 
         <div className="flex flex-col items-center gap-6 w-full">
-          <div className="flex flex-wrap justify-center gap-4 w-full">
-            {['SYS.FAST', '16_TYPES', 'SHAREABLE'].map((tag) => (
+          <div className="flex flex-wrap justify-center items-center gap-4 w-full">
+            <a
+              href="https://github.com/wuzitong/SBTIProgrammer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--color-primary)] text-sm px-3 py-1 border border-[var(--color-primary)] bg-[var(--color-bg-card)] shadow-[0_0_5px_rgba(255,153,0,0.5)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)] transition-colors flex items-center gap-1.5"
+              style={{ textDecoration: 'none' }}
+            >
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" xmlns="http://www.w3.org/2000/svg" style={{ shapeRendering: 'crispEdges' }}>
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              [GITHUB]
+            </a>
+            {['16_TYPES', '可导出结果'].map((tag) => (
               <span
                 key={tag}
                 className="text-[var(--color-primary)] text-sm px-3 py-1 border border-[var(--color-primary)] bg-[var(--color-bg-card)] shadow-[0_0_5px_rgba(255,153,0,0.5)]"
@@ -124,29 +136,39 @@ export default function Home({ onStart }) {
 
       {/* Gallery Modal */}
       {showGallery && (
-        <div className="fixed inset-0 z-50 flex justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="absolute top-4 left-4 right-4 bottom-0 md:top-[100px] md:left-[100px] md:right-[100px] flex flex-col bg-[var(--color-bg-dark)] border-l border-r border-t border-[var(--color-primary)] overflow-hidden shadow-[0_-20px_50px_rgba(255,153,0,0.15)] animate-slide-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4">
+          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-6xl h-[85vh] max-h-[800px] flex flex-col bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] overflow-hidden shadow-[0_0_50px_rgba(255,153,0,0.2)] animate-scale-in relative">
             
-            {/* Header */}
-            <div className="flex justify-between items-center p-4 md:p-6 border-b border-[var(--color-primary)] bg-[var(--color-bg-dark)] relative z-10">
+            {/* Terminal Header */}
+            <div className="flex justify-between items-center p-2 md:p-3 border-b-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 relative z-10 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-[var(--color-primary)] animate-pulse"></div>
-                <h2 className="text-xl md:text-2xl font-bold text-[var(--color-primary)] tracking-widest" style={{ textShadow: '0 0 10px #ff9900' }}>
-                  [ 人格图鉴 GALLERY ]
-                </h2>
+                <div className="flex gap-1.5 ml-1 mr-2 md:ml-2 md:mr-4">
+                   <span className="w-3 h-3 border border-[var(--color-primary)] opacity-50"></span>
+                   <span className="w-3 h-3 border border-[var(--color-primary)] opacity-80"></span>
+                   <span className="w-3 h-3 bg-[var(--color-primary)] animate-pulse"></span>
+                </div>
+                <span className="text-[var(--color-primary)] font-bold text-xs md:text-sm tracking-widest uppercase">
+                  C:\SYS\DB\GALLERY.EXE
+                </span>
               </div>
               <button
                 onClick={() => setShowGallery(false)}
-                className="text-[var(--color-primary)] hover:text-[var(--color-bg-dark)] hover:bg-[var(--color-accent-red)] border border-transparent hover:border-[var(--color-accent-red)] transition-colors px-3 py-1 text-sm md:text-base cursor-pointer font-bold flex items-center gap-2"
+                className="text-[var(--color-primary)] hover:text-[var(--color-bg-dark)] hover:bg-[var(--color-primary)] transition-colors px-3 py-1 text-xs md:text-sm font-bold flex items-center gap-2 border border-transparent"
               >
-                <span>[X]</span> <span className="hidden sm:inline">CLOSE_DB</span>
+                [X] CLOSE
               </button>
             </div>
             
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,153,0,0.03)_50%)] bg-[length:100%_4px]">
-              <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 pb-12">
+            <div className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,153,0,0.03)_50%)] bg-[length:100%_4px]">
+              <div className="mx-auto h-full">
+                <div className="flex items-center gap-3 mb-8">
+                  <h2 className="text-xl md:text-2xl font-bold text-[var(--color-primary)] tracking-widest glow-text uppercase" style={{ textShadow: '0 0 10px #ff9900' }}>
+                    &gt; 人格图鉴_GALLERY
+                  </h2>
+                  <span className="animate-blink text-[var(--color-primary)] text-xl font-bold">_</span>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 pb-12">
                   {Object.entries(archetypes).map(([key, data]) => (
                     <div 
                       key={key} 
@@ -183,10 +205,10 @@ export default function Home({ onStart }) {
 
       {/* Preview Modal */}
       {previewType && (
-        <div className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-md flex flex-col items-center justify-start p-4 overflow-y-auto custom-scrollbar animate-fade-in">
-          <div className="w-full max-w-5xl mt-4 md:mt-8 mb-20 animate-scale-in">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-fade-in">
+          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-5xl h-[85vh] max-h-[850px] flex flex-col animate-scale-in">
             {/* Preview Toolbar */}
-            <div className="flex justify-between items-center mb-6 sticky top-0 z-[70] bg-[var(--color-bg-dark)]/90 border border-[var(--color-primary)] p-3 backdrop-blur-md shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+            <div className="shrink-0 flex justify-between items-center mb-6 z-[70] bg-[var(--color-bg-dark)]/90 border border-[var(--color-primary)] p-3 shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-3">
                 <span className="w-2 h-4 bg-[var(--color-accent-cyan)] animate-pulse"></span>
                 <div className="text-[var(--color-accent-cyan)] font-bold tracking-widest text-xs md:text-sm">
@@ -202,7 +224,7 @@ export default function Home({ onStart }) {
             </div>
             
             {/* Render Result Card */}
-            <div className="flex justify-center drop-shadow-2xl">
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex justify-center drop-shadow-2xl pb-8">
               <ResultCard 
                 code={previewType} 
                 title={archetypes[previewType].name} 
