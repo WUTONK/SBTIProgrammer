@@ -17,7 +17,7 @@ const SpriteBlock = ({ x, y, w, h, bg, className = '' }) => (
 );
 
 export default function PunchedTape({ currentIndex, answers, totalQuestions, onJump, isShaking, isFalling, tapeBodyRef }) {
-  const [lastAction, setLastAction] = useState({ type: null, timestamp: 0 });
+  const [lastAction, setLastAction] = useState({ type: null, timestamp: 0, index: -1, prevText: null });
   const [scrollState, setScrollState] = useState({ left: false, right: false });
   const prevAnswersRef = useRef([]);
   const scrollContainerRef = useRef(null);
@@ -61,18 +61,26 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
     const prevAnswers = prevAnswersRef.current;
     const now = Date.now();
     if (answers.length > prevAnswers.length) {
-      setLastAction({ type: 'punch', timestamp: now });
+      setLastAction({ type: 'punch', timestamp: now, index: -1, prevText: null });
     } else if (answers.length === prevAnswers.length && answers.length > 0) {
-      const hasChanged = answers.some((ans, i) => ans?.text !== prevAnswers[i]?.text);
-      if (hasChanged) {
-        setLastAction({ type: 'correct', timestamp: now });
+      let changedIndex = -1;
+      let prevAnsText = null;
+      for (let i = 0; i < answers.length; i++) {
+        if (answers[i]?.text !== prevAnswers[i]?.text) {
+          changedIndex = i;
+          prevAnsText = prevAnswers[i]?.text;
+          break;
+        }
+      }
+      if (changedIndex !== -1) {
+        setLastAction({ type: 'correct', timestamp: now, index: changedIndex, prevText: prevAnsText });
       }
     }
     prevAnswersRef.current = JSON.parse(JSON.stringify(answers));
   }, [answers]);
 
   const isPunching = lastAction.type === 'punch' && (Date.now() - lastAction.timestamp < 200);
-  const isCorrecting = lastAction.type === 'correct' && (Date.now() - lastAction.timestamp < 800);
+  const isCorrecting = lastAction.type === 'correct' && (Date.now() - lastAction.timestamp < 1000);
 
   // IBM Punched Card Colors
   const cardBg = '#E4DAC4';
@@ -91,6 +99,16 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
         @keyframes arrowBreathing {
           0%, 100% { opacity: 0.3; transform: scale(0.9); }
           50% { opacity: 1; transform: scale(1.1); }
+        }
+        @keyframes tapeWipeAnim {
+          0% { width: 0px; opacity: 0.8; }
+          15% { width: 0px; opacity: 0.8; }
+          50% { width: 14px; opacity: 1; }
+          85% { width: 14px; opacity: 1; }
+          100% { width: 14px; opacity: 0; }
+        }
+        .animate-tape-wipe {
+          animation: tapeWipeAnim 1s linear forwards;
         }
         .animate-pixel-spark {
           animation: pixelSparkAnim 0.15s steps(1, end) forwards;
@@ -253,15 +271,32 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
                     {/* 1-3 行 */}
                     {[1, 2, 3].map((rowNum) => {
                       const isPunched = ansNum === rowNum;
+                      const isJustCorrected = isCorrecting && lastAction.index === colIdx && lastAction.prevText && questions[colIdx].options.findIndex(opt => opt.text === lastAction.prevText) + 1 === rowNum;
+
                       return (
                         <div key={rowNum} className="relative w-full h-5 flex items-center justify-center my-[1px]">
+                          {isJustCorrected && (
+                            <div 
+                              className="absolute z-10 h-[18px] bg-[#F8F9FA] top-1/2 -translate-y-1/2 left-[2px] animate-tape-wipe"
+                              style={{ 
+                                boxShadow: 'inset 1px 1px 0px rgba(255,255,255,0.8), 1px 1px 0px rgba(0,0,0,0.2)',
+                                imageRendering: 'pixelated'
+                              }}
+                            >
+                              <div className="absolute -left-[1px] top-[2px] bottom-[2px] w-[1px] bg-[#F8F9FA]"></div>
+                              <div className="absolute -right-[1px] top-[2px] bottom-[2px] w-[1px] bg-[#F8F9FA]"></div>
+                              <div className="absolute -top-[1px] left-[2px] right-[2px] h-[1px] bg-[#F8F9FA]"></div>
+                              <div className="absolute -bottom-[1px] left-[2px] right-[2px] h-[1px] bg-[#F8F9FA]"></div>
+                              <div className="w-full h-[2px] bg-black/5 absolute top-1/2 -translate-y-1/2"></div>
+                            </div>
+                          )}
                           {isPunched ? (
                             <div 
-                              className="absolute w-[10px] h-[16px] border border-black/20"
+                              className="absolute w-[10px] h-[16px] border border-black/20 z-20"
                               style={{ backgroundColor: holeColor, boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.8)' }}
                             ></div>
                           ) : (
-                            <span className={`text-[11px] font-bold ${isCurrent ? 'opacity-80 text-red-800' : 'opacity-60'} group-hover:opacity-100 transition-opacity`}>
+                            <span className={`text-[11px] font-bold ${isCurrent ? 'opacity-80 text-red-800' : 'opacity-60'} group-hover:opacity-100 transition-opacity relative z-20`}>
                               {rowNum}
                             </span>
                           )}
@@ -275,13 +310,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
           </div>
         </div>
       </div>
-      </div>
-
-      {isCorrecting && !isFalling && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-screen h-8 bg-white/40 backdrop-blur-sm z-50 pointer-events-none flex items-center justify-center border-y-2 border-white animate-correct-slide">
-          <span className="text-[10px] text-white font-bold tracking-widest">REPAIRING_CARD...</span>
-        </div>
-      )}
     </div>
+  </div>
   );
 }
