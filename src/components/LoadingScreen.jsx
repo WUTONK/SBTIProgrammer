@@ -59,10 +59,7 @@ export default function LoadingScreen({ answers, onComplete }) {
       <div className="fixed inset-0 flex items-center justify-center px-4 z-[100] pointer-events-none">
         <div className="max-w-md w-full text-center retro-card p-8 md:p-12 bg-[var(--color-bg-card)] shadow-[0_0_50px_rgba(255,153,0,0.3)] overflow-hidden pointer-events-auto">
 
-          {/* 密封线 — 与 Quiz sealed 状态一致 */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[340px] h-10 -translate-y-[2px] overflow-hidden z-[70]">
-            <div className="w-full h-[1px] bg-[var(--color-primary)] absolute bottom-0 shadow-[0_0_8px_var(--color-primary)] opacity-40"></div>
-          </div>
+          {/* 移除顶部密封线 */}
 
           <div className="mb-10">
             <div ref={spinnerRef} className="text-7xl text-[var(--color-primary)] mb-6 glow-text font-mono h-20 flex items-center justify-center">

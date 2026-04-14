@@ -39,19 +39,12 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
         <div className={`w-16 h-12 bg-[var(--color-primary-dark)] border-4 border-[var(--color-primary)] relative flex items-end justify-center pb-1 transition-transform ${isPunching ? 'translate-y-1' : ''}`}
              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 80% 100%, 20% 100%, 0 70%)' }}>
           <div className="w-8 h-2 bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] mb-1"></div>
-          {isPunching && <div className="absolute -bottom-2 w-10 h-1 bg-[var(--color-primary)] animate-pulse shadow-[0_0_10px_var(--color-primary)]"></div>}
         </div>
       </div>
 
       {/* 纸带主体 — 外部 ref 供父组件用 Web Animations API 控制下落 */}
-      <div ref={tapeBodyRef} className={`relative ${isShaking ? 'animate-tape-shake' : ''}`}>
-        <div className="relative bg-[#d1c4a9] text-black p-2 font-mono text-[10px] md:text-xs shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#b3a68c] w-[340px]">
-          <div className="absolute -left-1 top-0 bottom-0 w-1 flex flex-col justify-around">
-            {[...Array(20)].map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-[var(--color-bg-dark)] opacity-10" style={{ clipPath: pixelCircle }}></div>
-            ))}
-          </div>
-
+      <div ref={tapeBodyRef} className={`relative z-40 ${isShaking ? 'animate-tape-shake' : ''}`}>
+        <div className={`relative bg-[#d1c4a9] text-black p-2 font-mono text-[10px] md:text-xs shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#b3a68c] w-[340px] ${isFalling ? 'pointer-events-none' : ''}`}>
           {rows.map(rowIdx => (
             <div key={rowIdx} className="flex items-center gap-3 py-1 border-b border-black/10 last:border-0">
               <div className="flex gap-1.5">
@@ -74,13 +67,15 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
                 })}
               </div>
 
-              <div className="w-px h-4 bg-black/40"></div>
+              {/* 移除 w-px 装饰线，改用间距 */}
+              <div className="w-1"></div>
 
               <div className="w-10 opacity-60 font-bold scale-90 whitespace-nowrap text-center">
                 {String(rowIdx * 10 + 1).padStart(2, '0')}-{String(rowIdx * 10 + 10).padStart(2, '0')}
               </div>
 
-              <div className="w-px h-4 bg-black/40"></div>
+              {/* 移除 w-px 装饰线，改用间距 */}
+              <div className="w-1"></div>
 
               <div className={`tracking-widest font-bold flex gap-0.5 ${currentIndex >= rowIdx * 10 && currentIndex < (rowIdx + 1) * 10 ? 'text-red-600' : 'text-black'}`}>
                 {getHexPreview(rowIdx).split('').map((char, i) => (
