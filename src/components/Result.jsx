@@ -62,58 +62,60 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
   if (!displayResult) return null
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 py-8 space-y-6 relative w-full min-h-full overflow-y-auto">
-      {/* 开发者调试按钮 */}
-      <button 
-        onClick={cycleDebug}
-        className="absolute top-4 right-4 text-[var(--color-text-muted)] text-xs border border-[var(--color-text-muted)] px-2 py-1 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors z-[110]"
-      >
-        [DEV: CYCLE_TYPE]
-      </button>
-
-      {/* The Result Card to be captured */}
-      <div className="flex justify-center w-full animate-slide-up flex-shrink-0">
-        <ResultCard 
-          ref={cardRef} 
-          code={displayResult.typeCode} 
-          title={displayResult.name || displayResult.typeName} 
-          description={displayResult.description} 
-          tags={displayResult.tags}
-          subDimensions={displayResult.subDimensions}
-          userName={userName}
-          role={displayResult.role}
-          avatarId={displayResult.avatarId}
-          layoutMode={desktopLayoutMode}
-        />
-      </div>
-
-      {/* 占位边距 */}
-      <div className="h-5"></div>
-
-      {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[400px]">
-        <button
-          onClick={handleDownload}
-          disabled={isGenerating}
-          className={`flex-1 retro-btn py-4 px-6 font-bold uppercase tracking-widest text-sm sm:text-base ${
-            isGenerating ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
+    <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 py-8 space-y-6 relative w-full min-h-full overflow-y-auto animate-mac-zoom-vertical-container">
+      <div className="w-full flex flex-col items-center space-y-6 animate-mac-zoom-vertical-content">
+        {/* 开发者调试按钮 */}
+        <button 
+          onClick={cycleDebug}
+          className="absolute top-4 right-4 text-[var(--color-text-muted)] text-xs border border-[var(--color-text-muted)] px-2 py-1 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors z-[110]"
         >
-          {isGenerating ? '> EXPORTING...' : '> EXPORT_PROFILE'}
+          [DEV: CYCLE_TYPE]
         </button>
+
+        {/* The Result Card to be captured */}
+        <div className="flex justify-center w-full animate-slide-up flex-shrink-0">
+          <ResultCard 
+            ref={cardRef} 
+            code={displayResult.typeCode} 
+            title={displayResult.name || displayResult.typeName} 
+            description={displayResult.description} 
+            tags={displayResult.tags}
+            subDimensions={displayResult.subDimensions}
+            userName={userName}
+            role={displayResult.role}
+            avatarId={displayResult.avatarId}
+            layoutMode={desktopLayoutMode}
+          />
+        </div>
+
+        {/* 占位边距 */}
+        <div className="h-5"></div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[400px]">
+          <button
+            onClick={handleDownload}
+            disabled={isGenerating}
+            className={`flex-1 retro-btn py-4 px-6 font-bold uppercase tracking-widest text-sm sm:text-base ${
+              isGenerating ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            {isGenerating ? '> EXPORTING...' : '> EXPORT_PROFILE'}
+          </button>
+          
+          <button
+            onClick={onRestart}
+            className="flex-1 border-2 border-[var(--color-accent-cyan)] text-[var(--color-accent-cyan)] bg-transparent hover:bg-[var(--color-accent-cyan)] hover:text-[var(--color-bg-dark)] shadow-[inset_0_0_10px_rgba(255,51,0,0.2),0_0_10px_rgba(255,51,0,0.2)] hover:shadow-[0_0_20px_rgba(255,51,0,0.8)] transition-all duration-200 py-4 px-6 font-bold uppercase tracking-widest text-sm sm:text-base"
+          >
+            {'>'} REBOOT_SYS
+          </button>
+        </div>
         
-        <button
-          onClick={onRestart}
-          className="flex-1 border-2 border-[var(--color-accent-cyan)] text-[var(--color-accent-cyan)] bg-transparent hover:bg-[var(--color-accent-cyan)] hover:text-[var(--color-bg-dark)] shadow-[inset_0_0_10px_rgba(255,51,0,0.2),0_0_10px_rgba(255,51,0,0.2)] hover:shadow-[0_0_20px_rgba(255,51,0,0.8)] transition-all duration-200 py-4 px-6 font-bold uppercase tracking-widest text-sm sm:text-base"
-        >
-          {'>'} REBOOT_SYS
-        </button>
+        {/* 底部提示 */}
+        <p className="text-[var(--color-text-muted)] text-xs uppercase tracking-widest">
+          {'>'} ANALYSIS COMPLETE. PRESS ANY KEY TO CONTINUE... <span className="animate-blink">_</span>
+        </p>
       </div>
-      
-      {/* 底部提示 */}
-      <p className="text-[var(--color-text-muted)] text-xs uppercase tracking-widest">
-        {'>'} ANALYSIS COMPLETE. PRESS ANY KEY TO CONTINUE... <span className="animate-blink">_</span>
-      </p>
     </div>
   )
 }

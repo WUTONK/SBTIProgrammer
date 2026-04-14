@@ -167,7 +167,7 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
       {/* 题目区域 */}
       <div className="flex-1 flex flex-col items-center relative">
         <div className={`flex-none h-[20vh] md:h-[25vh] transition-opacity duration-500 ${isFinishing ? 'opacity-0' : 'opacity-100'}`}></div>
-        <div className={`w-full max-w-2xl px-4 flex flex-col transition-all duration-700 
+        <div className={`w-full max-w-2xl mx-auto px-4 flex flex-col transition-all duration-700 
           ${isFinishing ? 'opacity-0 translate-y-10 pointer-events-none' : 'opacity-100 translate-y-0'}`}
           style={{ gap: '5px' }}>
           
