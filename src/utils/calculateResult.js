@@ -86,6 +86,7 @@ export function calculateResult(answers) {
     typeCode,
     role: typeInfo.role,
     typeName: typeInfo.name,
+    avatarId: typeInfo.avatarId,
     description: typeInfo.description,
     tags: typeInfo.tags,
     dimensionScores,

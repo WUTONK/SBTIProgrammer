@@ -64,7 +64,7 @@ export default function Home({ onStart }) {
         <div className="flex flex-col items-center gap-6 w-full">
           <div className="flex flex-wrap justify-center items-center gap-4 w-full">
             <a
-              href="https://github.com/wuzitong/SBTIProgrammer"
+              href="https://github.com/WUTONK/SBTIProgrammer"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[var(--color-primary)] text-sm px-3 py-1 border border-[var(--color-primary)] bg-[var(--color-bg-card)] shadow-[0_0_5px_rgba(255,153,0,0.5)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)] transition-colors flex items-center gap-1.5"

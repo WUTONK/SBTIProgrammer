@@ -18,6 +18,16 @@ const SpriteBlock = ({ x, y, w, h, bg, className = '' }) => (
 export default function PunchedTape({ currentIndex, answers, totalQuestions, onJump, isShaking, isFalling, tapeBodyRef }) {
   const [lastAction, setLastAction] = useState({ type: null, timestamp: 0 });
   const prevAnswersRef = useRef([]);
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const columnWidth = 24; // 18px width + gap
+      const targetScroll = currentIndex * columnWidth - container.offsetWidth / 2 + columnWidth / 2;
+      container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    }
+  }, [currentIndex]);
 
   useEffect(() => {
     const prevAnswers = prevAnswersRef.current;
@@ -42,7 +52,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
   const holeColor = 'var(--color-bg-dark)';
 
   return (
-    <div className="w-full relative overflow-x-auto scrollbar-hide py-4 px-4 flex justify-center">
+    <div className="w-full relative py-4 px-4 flex justify-center">
       <style>{`
         @keyframes pixelSparkAnim {
           0% { opacity: 1; transform: scale(0.8); }
@@ -53,6 +63,8 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
         .animate-pixel-spark {
           animation: pixelSparkAnim 0.15s steps(1, end) forwards;
         }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* 内部容器，保持打孔机和纸卡上下垂直居中对齐 */}
@@ -129,75 +141,81 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
           </div>
         </div>
 
-        {/* 纸带主体 */}
+        {/* 纸带主体包裹容器 - 启用水平滚动 */}
         <div 
-          ref={tapeBodyRef} 
-          className={`relative shrink-0 shadow-[4px_4px_15px_rgba(0,0,0,0.5)] transition-transform duration-300 ${isShaking ? 'animate-tape-shake' : ''} ${isFalling ? 'pointer-events-none' : ''}`}
-          style={{ 
-            width: '760px', 
-            backgroundColor: cardBg,
-            color: inkColor,
-            fontFamily: "'Courier New', Courier, monospace",
-            clipPath: 'polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px)',
-            padding: '12px 16px 20px 30px',
-            userSelect: 'none',
-            border: '1px solid #C4B9A3'
-          }}
+          ref={scrollContainerRef}
+          className="w-full overflow-x-auto scrollbar-hide"
+          style={{ maxWidth: '95vw' }}
         >
-          {/* 左侧垂直印刷文字 */}
           <div 
-            className="absolute left-2 top-1/2 -translate-y-1/2 -rotate-90 text-[7px] font-bold tracking-widest opacity-70 origin-center whitespace-nowrap"
+            ref={tapeBodyRef} 
+            className={`relative shrink-0 mx-auto shadow-[4px_4px_15px_rgba(0,0,0,0.5)] transition-transform duration-300 ${isShaking ? 'animate-tape-shake' : ''} ${isFalling ? 'pointer-events-none' : ''}`}
+            style={{ 
+              width: '760px', 
+              backgroundColor: cardBg,
+              color: inkColor,
+              fontFamily: "'Courier New', Courier, monospace",
+              clipPath: 'polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px)',
+              padding: '12px 16px 20px 30px',
+              userSelect: 'none',
+              border: '1px solid #C4B9A3'
+            }}
           >
-            PROGRAMMER SBTI DATA CENTER &lt;wutonk.xyz&gt;
-          </div>
+            {/* 左侧垂直印刷文字 */}
+            <div 
+              className="absolute left-2 top-1/2 -translate-y-1/2 -rotate-90 text-[7px] font-bold tracking-widest opacity-70 origin-center whitespace-nowrap"
+            >
+              PROGRAMMER SBTI DATA CENTER &lt;wutonk.xyz&gt;
+            </div>
 
-          {/* 顶部印刷文字 */}
-          <div className="flex justify-between text-[11px] font-bold mb-3 tracking-widest uppercase opacity-80 pl-2">
-            <span>{`HELLO, WORLD. THIS IS PROGRAMMER SBTI. AWAITING INPUT...`}</span>
-            <span>CDL 0815</span>
-          </div>
+            {/* 顶部印刷文字 */}
+            <div className="flex justify-between text-[11px] font-bold mb-3 tracking-widest uppercase opacity-80 pl-2">
+              <span>{`HELLO, WORLD. THIS IS PROGRAMMER SBTI. AWAITING INPUT...`}</span>
+              <span>CDL 0815</span>
+            </div>
 
-          {/* 答题孔位网格 */}
-          <div className="flex justify-between w-full">
-            {Array.from({ length: totalQuestions }).map((_, colIdx) => {
-              const answered = answers[colIdx];
-              const ansChar = answered ? answered.text.charAt(0).toUpperCase() : null;
-              // 映射选项到行数：A->1, B->2, C->3, D->4
-              const ansNum = ansChar === 'A' ? 1 : ansChar === 'B' ? 2 : ansChar === 'C' ? 3 : ansChar === 'D' ? 4 : null;
-              const isCurrent = currentIndex === colIdx;
+            {/* 答题孔位网格 */}
+            <div className="flex justify-between w-full">
+              {Array.from({ length: totalQuestions }).map((_, colIdx) => {
+                const answered = answers[colIdx];
+                const ansChar = answered ? answered.text.charAt(0).toUpperCase() : null;
+                // 映射选项到行数：A->1, B->2, C->3
+                const ansNum = ansChar === 'A' ? 1 : ansChar === 'B' ? 2 : ansChar === 'C' ? 3 : null;
+                const isCurrent = currentIndex === colIdx;
 
-              return (
-                <div 
-                  key={colIdx}
-                  onClick={() => !isFalling && !isShaking && onJump(colIdx)}
-                  className={`flex flex-col items-center cursor-pointer group w-[18px] transition-colors ${isCurrent ? 'bg-black/10 rounded-sm' : 'hover:bg-black/5 rounded-sm'}`}
-                >
-                  {/* 列号 (题号 1-30) */}
-                  <div className={`h-6 flex items-center justify-center text-[11px] font-bold my-[2px] ${isCurrent ? 'text-red-600 scale-125' : 'opacity-70'}`}>
-                    {colIdx + 1}
+                return (
+                  <div 
+                    key={colIdx}
+                    onClick={() => !isFalling && !isShaking && onJump(colIdx)}
+                    className={`flex flex-col items-center cursor-pointer group w-[18px] transition-colors ${isCurrent ? 'bg-black/10 rounded-sm' : 'hover:bg-black/5 rounded-sm'}`}
+                  >
+                    {/* 列号 (题号 1-30) */}
+                    <div className={`h-6 flex items-center justify-center text-[11px] font-bold my-[2px] ${isCurrent ? 'text-red-600 scale-125' : 'opacity-70'}`}>
+                      {colIdx + 1}
+                    </div>
+
+                    {/* 1-3 行 */}
+                    {[1, 2, 3].map((rowNum) => {
+                      const isPunched = ansNum === rowNum;
+                      return (
+                        <div key={rowNum} className="relative w-full h-5 flex items-center justify-center my-[1px]">
+                          {isPunched ? (
+                            <div 
+                              className="absolute w-[10px] h-[16px] border border-black/20"
+                              style={{ backgroundColor: holeColor, boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.8)' }}
+                            ></div>
+                          ) : (
+                            <span className={`text-[11px] font-bold ${isCurrent ? 'opacity-80 text-red-800' : 'opacity-60'} group-hover:opacity-100 transition-opacity`}>
+                              {rowNum}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-
-                  {/* 1-3 行 */}
-                  {[1, 2, 3].map((rowNum) => {
-                    const isPunched = ansNum === rowNum;
-                    return (
-                      <div key={rowNum} className="relative w-full h-5 flex items-center justify-center my-[1px]">
-                        {isPunched ? (
-                          <div 
-                            className="absolute w-[10px] h-[16px] border border-black/20"
-                            style={{ backgroundColor: holeColor, boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.8)' }}
-                          ></div>
-                        ) : (
-                          <span className={`text-[11px] font-bold ${isCurrent ? 'opacity-80 text-red-800' : 'opacity-60'} group-hover:opacity-100 transition-opacity`}>
-                            {rowNum}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
