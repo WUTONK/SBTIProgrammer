@@ -160,8 +160,8 @@ export default function Home({ onStart }) {
             </div>
             
             {/* Content Area */}
-            <div className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,153,0,0.03)_50%)] bg-[length:100%_4px]">
-              <div className="mx-auto h-full">
+            <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,153,0,0.03)_50%)] bg-[length:100%_4px]">
+              <div className="mx-auto">
                 <div className="flex items-center gap-3 mb-8">
                   <h2 className="text-xl md:text-2xl font-bold text-[var(--color-primary)] tracking-widest glow-text uppercase" style={{ textShadow: '0 0 10px #ff9900' }}>
                     &gt; 人格图鉴_GALLERY

@@ -112,8 +112,7 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
     // 纸带掉落到卡片中心位置并消失
     const fallDistance = cardRect.top - tapeRect.top + 100
 
-    setPhase('falling')
-
+    // 先启动动画，再设置 phase 以减少渲染抖动对动画初始化的影响
     const fallAnim = tapeEl.animate([
       { transform: 'translateY(0)', opacity: 1 },
       { transform: `translateY(${fallDistance}px)`, opacity: 0 }
@@ -122,6 +121,8 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
       easing: 'cubic-bezier(0.5, 0, 0.7, 1)',
       fill: 'forwards'
     })
+
+    setPhase('falling')
 
     fallAnim.onfinish = () => {
       startAnalysis()
@@ -245,7 +246,7 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
           {/* 进度条 */}
           <div className="w-full bg-black border-2 border-[var(--color-primary)] h-8 p-1 relative z-10">
             <div 
-              className="h-full bg-[var(--color-primary)] shadow-[0_0_10px_var(--color-primary)] transition-all duration-100 ease-out" 
+              className="h-full bg-[var(--color-primary)] shadow-[0_0_10px_var(--color-primary)]" 
               style={{ width: `${analysisProgress}%` }}
             ></div>
           </div>
