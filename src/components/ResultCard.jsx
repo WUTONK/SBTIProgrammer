@@ -90,7 +90,13 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
           <div key={key} className={`flex flex-col ${!isLast ? 'border-b border-dashed border-[var(--color-primary)] border-opacity-30 pb-3' : ''}`}>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[var(--color-accent-cyan)] font-bold text-xs pl-[2px]">{key}</span>
-              <span className={`text-[10px] font-bold ${level === 'H' ? 'text-green-400 border border-green-400' : level === 'L' ? 'text-red-400 border border-red-400' : 'text-yellow-400 border border-yellow-400'}`} style={{ letterSpacing: 0, padding: '0 1.5px' }}>{level}</span>
+              <span 
+                className={`text-[9px] font-bold flex items-center justify-center ${level === 'H' ? 'text-green-400 border border-green-400' : level === 'L' ? 'text-red-400 border border-red-400' : 'text-yellow-400 border border-yellow-400'}`} 
+                style={{ letterSpacing: 0, width: '12px', height: '12px', marginTop: '1px' }}
+              >
+                {level}
+              </span>
+
               <span className="text-[10px] text-[var(--color-primary)] opacity-80">{data.title}</span>
             </div>
             <p className="text-[10px] leading-snug opacity-90" style={{ textShadow: '0 0 2px #ff9900' }}>{desc}</p>
@@ -152,16 +158,16 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
       <div className="hidden lg:block">
         {layoutMode === 'A' && (
           <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-5 border-r border-dashed border-[var(--color-primary)] pr-8">
+            <div className="col-span-5 border-r border-dashed border-[var(--color-primary)]" style={{ paddingRight: '32px' }}>
               {renderHeader()}
               {renderTitle()}
               <Divider title="[ 代表人物 ]" noPadding />
               {renderAvatar()}
               <Divider title="[ 人格描述 ]" noPadding />
-              <div className="px-2"><p className="text-sm leading-relaxed">{description}</p></div>
+              <div style={{ paddingLeft: '8px' }}><p className="text-sm leading-relaxed">{description}</p></div>
               {renderFooter()}
             </div>
-            <div className="col-span-7">
+            <div className="col-span-7" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
               <Divider title="[ 纬度画像 | DIMENSIONS ]" noPadding />
               {renderDimensions(1)}
               <Divider title="[ 详细画像 | SUB-DIMENSIONS ]" noPadding />
@@ -171,20 +177,20 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
         )}
 
         {layoutMode === 'B' && (
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-3 border-r border-dashed border-[var(--color-primary)] pr-4">
+          <div className="grid grid-cols-12 gap-0">
+            <div className="col-span-3 border-r border-dashed border-[var(--color-primary)]" style={{ paddingRight: '32px', paddingLeft: '16px' }}>
               {renderHeader()}
               {renderTitle()}
               <Divider title="[ 代表 ]" noPadding />
               {renderAvatar()}
-              <div className="mt-6 px-2"><p className="text-[10px] leading-relaxed">{description}</p></div>
+              <div className="mt-6"><p className="text-[10px] leading-relaxed">{description}</p></div>
               {renderFooter()}
             </div>
-            <div className="col-span-4 border-r border-dashed border-[var(--color-primary)] px-4">
+            <div className="col-span-4 border-r border-dashed border-[var(--color-primary)]" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
               <Divider title="[ 纬度画像 ]" noPadding />
               {renderDimensions(1)}
             </div>
-            <div className="col-span-5 pl-4">
+            <div className="col-span-5" style={{ paddingLeft: '32px', paddingRight: '32px' }}>
               <Divider title="[ 详细子维度 ]" noPadding />
               {renderSubDimensions(2)}
             </div>

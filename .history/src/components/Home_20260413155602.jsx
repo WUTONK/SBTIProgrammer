@@ -14,12 +14,12 @@ export default function Home({ onStart }) {
             <span className="w-3 h-3 bg-[var(--color-primary)] mr-2"></span>
             <span className="w-3 h-3 bg-[var(--color-primary)] mr-2 opacity-50"></span>
             <span className="w-3 h-3 bg-[var(--color-primary)] opacity-20"></span>
-            <span className="ml-auto text-xs glow-text">|LANG:ZH-CN</span>
+            <span className="ml-auto text-xs glow-text">CMD64.EXE</span>
           </div>
           
           <div className="mb-8" style={{ paddingLeft: '1ch', paddingRight: '1ch' }}>
             <p className="text-[var(--color-primary)] text-sm mb-4">
-              A:\&gt; RUN PROGRAMMER_SBTI.C
+              C:\&gt; RUN PROGRAMMER_SBTI.EXE
             </p>
             <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-primary)] mb-4 glow-text uppercase tracking-widest leading-tight">
               Programmer<br/>SBTI

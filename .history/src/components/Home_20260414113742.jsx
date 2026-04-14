@@ -14,7 +14,7 @@ export default function Home({ onStart }) {
             <span className="w-3 h-3 bg-[var(--color-primary)] mr-2"></span>
             <span className="w-3 h-3 bg-[var(--color-primary)] mr-2 opacity-50"></span>
             <span className="w-3 h-3 bg-[var(--color-primary)] opacity-20"></span>
-            <span className="ml-auto text-xs glow-text">|LANG:ZH-CN</span>
+            <span className="ml-auto text-xs glow-text">CMD64.EXE</span>
           </div>
           
           <div className="mb-8" style={{ paddingLeft: '1ch', paddingRight: '1ch' }}>

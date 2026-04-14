@@ -86,6 +86,9 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
         />
       </div>
 
+      {/* 额外的占位边距，确保按钮不贴着卡片 */}
+      <div className="h-5"></div>
+
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[400px]">
         <button
