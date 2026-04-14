@@ -1,0 +1,59 @@
+name: Deploy Vite React App to GitHub Pages
+
+on:
+  # 监听对 main 分支的 push 操作
+  push:
+    branches: ["main"]
+  # 允许在 GitHub 的 Actions 选项卡中手动触发此工作流
+  workflow_dispatch:
+
+# 授予 GITHUB_TOKEN 将构建产物部署到 Pages 的关键权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 并发控制：确保同一时间只有一个部署任务在运行，避免状态冲突
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # 构建任务 (Build Job)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # 指定使用稳定的Node版本
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload production artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # Vite 默认的打包输出目录
+
+  # 部署任务 (Deploy Job)
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build # 只有构建成功后才会执行部署
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
