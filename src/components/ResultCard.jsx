@@ -105,7 +105,7 @@ const Divider = ({ title }) => (
   </div>
 );
 
-const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role }, ref) => {
+const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId }, ref) => {
   const dim1 = code[0]
   const dim2 = code[1]
   const dim3 = code[2]
@@ -169,16 +169,23 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
         <>
           <Divider title="[ 代表人物 | REPRESENTATIVE ]" />
           <div className="flex flex-col items-center gap-3">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 border border-[var(--color-primary)] p-1 relative z-[60]">
+            <div className="w-32 h-32 sm:w-36 sm:h-36 border-2 border-[var(--color-primary)] p-1 relative z-[60] bg-black shadow-[0_0_20px_rgba(255,153,0,0.2)]">
               <img 
-                src={`${import.meta.env.BASE_URL}avatar/${role}.png`} 
+                src={`./avatar/${avatarId || 'Linus'}.webp`} 
                 alt={role} 
                 className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = `${import.meta.env.BASE_URL}avatar/Linus.png` }} 
+                style={{ imageRendering: 'pixelated' }}
+                onError={(e) => { 
+                  // 容错处理
+                  e.target.src = './avatar/Linus.webp'
+                }} 
               />
+
+              {/* 装饰性扫描线覆盖在头像上 */}
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[var(--color-primary)]/5 to-transparent opacity-30 animate-pulse"></div>
             </div>
-            <div className="text-center">
-              <div className="text-base sm:text-lg font-bold" style={{ textShadow: '0 0 4px #ff9900' }}>
+            <div className="text-center mt-1">
+              <div className="text-base sm:text-lg font-bold text-[var(--color-primary)] tracking-widest" style={{ textShadow: '0 0 8px #ff9900' }}>
                 {role}
               </div>
             </div>

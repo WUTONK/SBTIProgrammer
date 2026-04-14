@@ -81,6 +81,7 @@ export default function Result({ result, onRestart, userName }) {
           subDimensions={displayResult.subDimensions}
           userName={userName}
           role={displayResult.role}
+          avatarId={displayResult.avatarId}
         />
       </div>
 
