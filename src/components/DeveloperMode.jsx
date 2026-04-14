@@ -2,8 +2,14 @@ import { useState, useEffect } from 'react'
 import { questions } from '../data/questions.js'
 import { archetypes } from '../data/archetypes.js'
 
-export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipLoading, setSkipLoading, useCrtCurve, setUseCrtCurve }) {
+export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipLoading, setSkipLoading, useCrtCurve, setUseCrtCurve, desktopLayoutMode, setDesktopLayoutMode }) {
   const [isVisible, setIsVisible] = useState(false)
+
+  const cycleLayout = () => {
+    const modes = ['A', 'B', 'C']
+    const nextIndex = (modes.indexOf(desktopLayoutMode) + 1) % modes.length
+    setDesktopLayoutMode(modes[nextIndex])
+  }
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -60,6 +66,16 @@ export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipL
                 />
                 <span className="uppercase tracking-widest text-sm">CRT Curve Effect</span>
               </label>
+
+              <div className="flex flex-col gap-2">
+                <span className="uppercase tracking-widest text-[10px] text-[var(--color-primary)] opacity-60 pl-1">Desktop Layout Mode</span>
+                <button 
+                  onClick={cycleLayout}
+                  className="retro-btn px-4 py-2 text-sm text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-dark)] transition-colors"
+                >
+                  MODE: {desktopLayoutMode}
+                </button>
+              </div>
             </div>
           </section>
 

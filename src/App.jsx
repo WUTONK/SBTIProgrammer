@@ -23,6 +23,7 @@ export default function App() {
   const [quizIndex, setQuizIndex] = useState(0)
   const [skipLoading, setSkipLoading] = useState(false)
   const [useCrtCurve, setUseCrtCurve] = useState(false)
+  const [desktopLayoutMode, setDesktopLayoutMode] = useState('A')
 
   const handleStart = useCallback((name) => {
     setUserName(name || 'GUEST')
@@ -92,7 +93,7 @@ export default function App() {
       case SCREENS.LOADING:
         return <LoadingScreen answers={answers} onComplete={handleLoadingComplete} />
       case SCREENS.RESULT:
-        return <Result result={result} onRestart={handleRestart} userName={userName} />
+        return <Result result={result} onRestart={handleRestart} userName={userName} desktopLayoutMode={desktopLayoutMode} />
       default:
         return <Home onStart={handleStart} />
     }
@@ -103,8 +104,8 @@ export default function App() {
       {/* Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none z-50 mix-blend-overlay opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')]"></div>
       
-      {/* Vignette effect */}
-      <div className="absolute inset-0 pointer-events-none z-40 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.95)_100%)]"></div>
+      {/* Vignette effect - 弱化处理以提高可见度 */}
+      <div className="absolute inset-0 pointer-events-none z-40 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(0,0,0,0.7)_100%)]"></div>
 
       <div className="crt-content-wrapper relative flex-1 flex flex-col h-full overflow-y-auto">
         {renderScreen()}
@@ -117,6 +118,8 @@ export default function App() {
         setSkipLoading={setSkipLoading}
         useCrtCurve={useCrtCurve}
         setUseCrtCurve={setUseCrtCurve}
+        desktopLayoutMode={desktopLayoutMode}
+        setDesktopLayoutMode={setDesktopLayoutMode}
       />
     </div>
   )

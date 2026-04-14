@@ -3,7 +3,7 @@ import * as htmlToImage from 'html-to-image'
 import ResultCard from './ResultCard'
 import { archetypes } from '../data/archetypes.js'
 
-export default function Result({ result, onRestart, userName }) {
+export default function Result({ result, onRestart, userName, desktopLayoutMode }) {
   const cardRef = useRef(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [debugIndex, setDebugIndex] = useState(-1)
@@ -62,17 +62,17 @@ export default function Result({ result, onRestart, userName }) {
   if (!displayResult) return null
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start p-4 py-8 space-y-6 relative w-full min-h-full">
+    <div className="flex-1 flex flex-col items-center justify-start md:justify-center p-4 py-12 space-y-8 relative w-full min-h-full">
       {/* 开发者调试按钮 */}
       <button 
         onClick={cycleDebug}
-        className="absolute top-4 right-4 text-[var(--color-text-muted)] text-xs border border-[var(--color-text-muted)] px-2 py-1 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors z-50"
+        className="absolute top-4 right-4 text-[var(--color-text-muted)] text-xs border border-[var(--color-text-muted)] px-2 py-1 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors z-[110]"
       >
         [DEV: CYCLE_TYPE]
       </button>
 
       {/* The Result Card to be captured */}
-      <div className="flex justify-center w-full animate-slide-up">
+      <div className="flex justify-center w-full animate-slide-up flex-shrink-0">
         <ResultCard 
           ref={cardRef} 
           code={displayResult.typeCode} 
@@ -82,6 +82,7 @@ export default function Result({ result, onRestart, userName }) {
           userName={userName}
           role={displayResult.role}
           avatarId={displayResult.avatarId}
+          layoutMode={desktopLayoutMode}
         />
       </div>
 
