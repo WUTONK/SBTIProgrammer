@@ -43,7 +43,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
           <div className="w-3 h-3 bg-[var(--color-primary)] animate-pulse mt-0.5"></div>
           <span className="text-sm font-bold tracking-widest" style={{ textShadow: '0 0 5px #ff9900' }}>SYS.ID: {code}</span>
         </div>
-        <div className="text-xs font-bold tracking-widest ml-5 opacity-90" style={{ textShadow: '0 0 3px #ff9900' }}>USER: {displayUserName}</div>
+        <div className="font-bold tracking-widest ml-5 opacity-90" style={{ textShadow: '0 0 3px #ff9900' }}>USER: {displayUserName}</div>
       </div>
       <div className="text-xs text-[var(--color-accent-cyan)] mt-1" style={{ textShadow: '0 0 5px #00ffff' }}>VERIFIED</div>
     </div>
