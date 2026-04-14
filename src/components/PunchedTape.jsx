@@ -80,7 +80,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
   const holeColor = 'var(--color-bg-dark)';
 
   return (
-    <div className="w-full relative py-4 px-4 flex justify-center overflow-hidden">
+    <div className="w-full relative py-4 px-4 flex justify-center">
       <style>{`
         @keyframes pixelSparkAnim {
           0% { opacity: 1; transform: scale(0.8); }
@@ -193,14 +193,14 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
         </div>
 
         {/* 纸带主体包裹容器 - 启用水平滚动 */}
-        <div 
-          ref={scrollContainerRef}
-          className="w-full overflow-x-auto scrollbar-hide"
-          style={{ maxWidth: '95vw' }}
-        >
+        <div ref={tapeBodyRef} className={`w-full transition-transform duration-300 ${isShaking ? 'animate-tape-shake' : ''} ${isFalling ? 'pointer-events-none' : ''}`}>
           <div 
-            ref={tapeBodyRef} 
-            className={`relative shrink-0 mx-auto shadow-[4px_4px_15px_rgba(0,0,0,0.5)] transition-transform duration-300 ${isShaking ? 'animate-tape-shake' : ''} ${isFalling ? 'pointer-events-none' : ''}`}
+            ref={scrollContainerRef}
+            className="w-full overflow-x-auto scrollbar-hide"
+            style={{ maxWidth: '95vw' }}
+          >
+            <div 
+              className="relative shrink-0 mx-auto shadow-[4px_4px_15px_rgba(0,0,0,0.5)]"
             style={{ 
               width: '760px', 
               backgroundColor: cardBg,
@@ -274,6 +274,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
             </div>
           </div>
         </div>
+      </div>
       </div>
 
       {isCorrecting && !isFalling && (
