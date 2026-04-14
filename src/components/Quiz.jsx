@@ -167,49 +167,54 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
       {/* 题目区域 */}
       <div className="flex-1 flex flex-col items-center relative">
         <div className={`flex-none h-[20vh] md:h-[25vh] transition-opacity duration-500 ${isFinishing ? 'opacity-0' : 'opacity-100'}`}></div>
-        <div className={`w-full max-w-2xl px-4 transition-all duration-700 
-          ${isFinishing ? 'opacity-0 translate-y-10 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
-          <div className="mb-8 retro-card p-4">
-            <div className="flex justify-between text-[var(--color-primary)] mb-2 uppercase text-sm">
-              <span>{'>'} QUERY {currentIndex + 1}/{questions.length}</span>
-              <span className="glow-text">{progressPercentage}%</span>
+        <div className={`w-full max-w-2xl px-4 flex flex-col transition-all duration-700 
+          ${isFinishing ? 'opacity-0 translate-y-10 pointer-events-none' : 'opacity-100 translate-y-0'}`}
+          style={{ gap: '5px' }}>
+          
+          {/* 共同父DIV，包裹进度条和答题题目 */}
+          <div className="flex flex-col w-full">
+            <div className="mb-0 retro-card p-4" style={{ borderBottom: 'none' }}>
+              <div className="flex justify-between text-[var(--color-primary)] mb-2 uppercase text-sm">
+                <span>{'>'} QUERY {currentIndex + 1}/{questions.length}</span>
+                <span className="glow-text">{progressPercentage}%</span>
+              </div>
+              <div className="w-full bg-[var(--color-bg-dark)] border border-[var(--color-primary)] h-4 p-[2px]">
+                <div className="bg-[var(--color-primary)] h-full transition-all duration-500" style={{ width: `${progressPercentage}%` }} />
+              </div>
             </div>
-            <div className="w-full bg-[var(--color-bg-dark)] border border-[var(--color-primary)] h-4 p-[2px]">
-              <div className="bg-[var(--color-primary)] h-full transition-all duration-500" style={{ width: `${progressPercentage}%` }} />
+
+            <div className={`retro-card p-6 md:p-8 mb-0 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <h2 className="text-xl md:text-3xl font-bold text-[var(--color-primary)] mb-8 uppercase glow-text">
+                {currentQuestion.text}
+              </h2>
+              <div className="space-y-4">
+                {currentQuestion.options.map((option, index) => (
+                  <button key={index} onClick={() => handleSelect(option)} disabled={isTransitioning || isFinishing}
+                    className={`w-full text-left retro-btn p-4 uppercase transition-all ${answers[currentIndex]?.text === option.text ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
+                    <span className="mr-3 font-bold">[{String.fromCharCode(65 + index)}]</span>
+                    {option.text}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className={`retro-card p-6 md:p-8 mb-6 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-            <h2 className="text-xl md:text-3xl font-bold text-[var(--color-primary)] mb-8 uppercase glow-text">
-              {currentQuestion.text}
-            </h2>
-            <div className="space-y-4">
-              {currentQuestion.options.map((option, index) => (
-                <button key={index} onClick={() => handleSelect(option)} disabled={isTransitioning || isFinishing}
-                  className={`w-full text-left retro-btn p-4 uppercase transition-all ${answers[currentIndex]?.text === option.text ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
-                  <span className="mr-3 font-bold">[{String.fromCharCode(65 + index)}]</span>
-                  {option.text}
-                </button>
-              ))}
-            </div>
-
-            {/* 底部导航按钮组 - 增加 mt-5 (20px) 边距 */}
-            <div className="mt-8 flex gap-4 w-full">
-              <button
-                onClick={handlePrev}
-                disabled={currentIndex === 0 || isTransitioning || isFinishing}
-                className={`flex-1 retro-btn py-3 text-sm font-bold tracking-widest ${currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
-              >
-                {'<'} PREV_QUERY
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={isTransitioning || isFinishing}
-                className="flex-1 retro-btn py-3 text-sm font-bold tracking-widest"
-              >
-                {currentIndex === questions.length - 1 ? 'FINISH_TAPE >' : 'NEXT_QUERY >'}
-              </button>
-            </div>
+          {/* 上下页选项在共同父DIV之外，但共享最外层的 DIV */}
+          <div className={`flex gap-4 w-full transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+            <button
+              onClick={handlePrev}
+              disabled={currentIndex === 0 || isTransitioning || isFinishing}
+              className={`flex-1 retro-btn py-3 text-sm font-bold tracking-widest ${currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
+            >
+              {'<'} 上一页
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={isTransitioning || isFinishing}
+              className="flex-1 retro-btn py-3 text-sm font-bold tracking-widest"
+            >
+              {currentIndex === questions.length - 1 ? '完成测试 >' : '下一页 >'}
+            </button>
           </div>
         </div>
       </div>

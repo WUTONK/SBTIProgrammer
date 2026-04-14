@@ -3,7 +3,7 @@ import { calculateResult } from '../utils/calculateResult.js'
 
 const SPINNER_CHARS = ['/', '-', '\\', '|']
 
-export default function LoadingScreen({ answers, onComplete }) {
+export default function LoadingScreen({ answers, onComplete, fastMode }) {
   const [progress, setProgress] = useState(0)
   const [currentStatus, setCurrentStatus] = useState('BOOTING ANALYZER...')
   const spinnerRef = useRef(null)
@@ -17,8 +17,8 @@ export default function LoadingScreen({ answers, onComplete }) {
   ]
 
   useEffect(() => {
-    const totalTime = 5000
-    const intervalTime = 100
+    const totalTime = fastMode ? 1000 : 5000
+    const intervalTime = fastMode ? 20 : 100
     const steps = totalTime / intervalTime
     const increment = 100 / steps
 
@@ -31,7 +31,7 @@ export default function LoadingScreen({ answers, onComplete }) {
         setTimeout(() => {
           const result = calculateResult(answers)
           onComplete(result)
-        }, 500)
+        }, fastMode ? 100 : 500)
       }
       setProgress(Math.floor(currentProgress))
 
@@ -50,9 +50,9 @@ export default function LoadingScreen({ answers, onComplete }) {
     const timer = setInterval(() => {
       idx = (idx + 1) % 4
       if (spinnerRef.current) spinnerRef.current.textContent = SPINNER_CHARS[idx]
-    }, 150)
+    }, fastMode ? 30 : 150)
     return () => clearInterval(timer)
-  }, [])
+  }, [fastMode])
 
   return (
     <div className="flex-1 flex flex-col w-full h-full overflow-hidden">

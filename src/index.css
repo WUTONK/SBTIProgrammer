@@ -203,7 +203,6 @@ body {
 /* CRT Curve Effect */
 .crt-curve {
   perspective: 1000px;
-  transform-style: preserve-3d;
 }
 
 .crt-curve .crt-content-wrapper {

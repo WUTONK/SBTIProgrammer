@@ -22,6 +22,7 @@ export default function App() {
   const [result, setResult] = useState(null)
   const [quizIndex, setQuizIndex] = useState(0)
   const [skipLoading, setSkipLoading] = useState(false)
+  const [fastLoading, setFastLoading] = useState(false)
   const [useCrtCurve, setUseCrtCurve] = useState(false)
 
   const handleStart = useCallback((name) => {
@@ -90,7 +91,7 @@ export default function App() {
           />
         )
       case SCREENS.LOADING:
-        return <LoadingScreen answers={answers} onComplete={handleLoadingComplete} />
+        return <LoadingScreen answers={answers} onComplete={handleLoadingComplete} fastMode={fastLoading} />
       case SCREENS.RESULT:
         return <Result result={result} onRestart={handleRestart} userName={userName} />
       default:
@@ -115,6 +116,8 @@ export default function App() {
         onPreviewResult={handlePreviewResult}
         skipLoading={skipLoading}
         setSkipLoading={setSkipLoading}
+        fastLoading={fastLoading}
+        setFastLoading={setFastLoading}
         useCrtCurve={useCrtCurve}
         setUseCrtCurve={setUseCrtCurve}
       />

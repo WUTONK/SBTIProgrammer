@@ -1,10 +1,28 @@
 import { useState } from 'react';
 import { archetypes } from '../data/archetypes.js';
+import ResultCard from './ResultCard';
 
 export default function Home({ onStart }) {
   const [showGallery, setShowGallery] = useState(false);
   const [userName, setUserName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [previewType, setPreviewType] = useState(null);
+
+  const handlePreview = (key) => {
+    setPreviewType(key);
+  };
+
+  const closePreview = () => {
+    setPreviewType(null);
+  };
+
+  // Mock subDimensions for preview
+  const mockSubDimensions = {
+    CO1: 'H', CO2: 'M', CO3: 'L',
+    SI1: 'H', SI2: 'H', SI3: 'M',
+    TP1: 'L', TP2: 'M', TP3: 'H',
+    PR1: 'H', PR2: 'L', PR3: 'M'
+  };
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 relative">
@@ -106,37 +124,96 @@ export default function Home({ onStart }) {
 
       {/* Gallery Modal */}
       {showGallery && (
-        <div className="fixed inset-0 z-50 bg-[var(--color-bg-dark)]/95 backdrop-blur-sm flex flex-col p-4 md:p-8 overflow-hidden">
-          <div className="flex justify-between items-center mb-6 border-b border-[var(--color-primary)] pb-4 max-w-6xl mx-auto w-full">
-            <h2 className="text-2xl font-bold text-[var(--color-primary)] glow-text">
-              [ 人格图鉴 GALLERY ]
-            </h2>
-            <button
-              onClick={() => setShowGallery(false)}
-              className="text-[var(--color-primary)] hover:text-[var(--color-accent-red)] text-xl cursor-pointer font-bold"
-            >
-              [X] CLOSE
-            </button>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar max-w-6xl mx-auto w-full">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-8">
-              {Object.entries(archetypes).map(([key, data]) => (
-                <div 
-                  key={key} 
-                  className="retro-card aspect-square flex flex-col items-center justify-center p-4 text-center hover:scale-105 transition-transform cursor-default group"
-                >
-                  <div className="text-3xl font-bold text-[var(--color-primary)] mb-2 group-hover:glow-text">
-                    {key}
-                  </div>
-                  <div className="text-[var(--color-accent-cyan)] font-bold mb-1 text-sm md:text-base">
-                    {data.name}
-                  </div>
-                  <div className="text-[var(--color-text-muted)] text-xs md:text-sm line-clamp-2">
-                    {data.role}
-                  </div>
+        <div className="fixed inset-0 z-50 flex justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="absolute top-4 left-4 right-4 bottom-0 md:top-[100px] md:left-[100px] md:right-[100px] flex flex-col bg-[var(--color-bg-dark)] border-l border-r border-t border-[var(--color-primary)] overflow-hidden shadow-[0_-20px_50px_rgba(255,153,0,0.15)] animate-slide-up">
+            
+            {/* Header */}
+            <div className="flex justify-between items-center p-4 md:p-6 border-b border-[var(--color-primary)] bg-[var(--color-bg-dark)] relative z-10">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-[var(--color-primary)] animate-pulse"></div>
+                <h2 className="text-xl md:text-2xl font-bold text-[var(--color-primary)] tracking-widest" style={{ textShadow: '0 0 10px #ff9900' }}>
+                  [ 人格图鉴 GALLERY ]
+                </h2>
+              </div>
+              <button
+                onClick={() => setShowGallery(false)}
+                className="text-[var(--color-primary)] hover:text-[var(--color-bg-dark)] hover:bg-[var(--color-accent-red)] border border-transparent hover:border-[var(--color-accent-red)] transition-colors px-3 py-1 text-sm md:text-base cursor-pointer font-bold flex items-center gap-2"
+              >
+                <span>[X]</span> <span className="hidden sm:inline">CLOSE_DB</span>
+              </button>
+            </div>
+            
+            {/* Content Area */}
+            <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,153,0,0.03)_50%)] bg-[length:100%_4px]">
+              <div className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 pb-12">
+                  {Object.entries(archetypes).map(([key, data]) => (
+                    <div 
+                      key={key} 
+                      onClick={() => handlePreview(key)}
+                      className="retro-card flex flex-col items-center justify-start p-5 text-center transition-all duration-300 cursor-pointer group hover:border-[var(--color-accent-cyan)] hover:bg-[var(--color-primary)]/5 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,255,255,0.15)] relative overflow-hidden"
+                      style={{ minHeight: '220px' }}
+                    >
+                      {/* Decorative corner accents */}
+                      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
+                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
+
+                      <div className="text-4xl font-black text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent-cyan)] transition-colors tracking-tighter" style={{ textShadow: '0 0 8px rgba(255,153,0,0.5)' }}>
+                        {key}
+                      </div>
+                      <div className="text-[var(--color-bg-dark)] bg-[var(--color-accent-cyan)] font-bold mb-3 text-xs md:text-sm px-2 py-0.5 shadow-[0_0_8px_rgba(0,255,255,0.6)]">
+                        {data.name}
+                      </div>
+                      <div className="text-[var(--color-text-muted)] text-xs leading-relaxed line-clamp-3 flex-1 flex items-center">
+                        {data.role}
+                      </div>
+                      
+                      <div className="w-full mt-4 pt-3 border-t border-dashed border-[var(--color-primary)]/30 text-[10px] text-[var(--color-primary)] opacity-50 group-hover:opacity-100 group-hover:text-[var(--color-accent-cyan)] transition-all tracking-widest flex justify-between items-center">
+                        <span>SYS.ID: {key}</span>
+                        <span className="animate-pulse">&gt; VIEW</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Preview Modal */}
+      {previewType && (
+        <div className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-md flex flex-col items-center justify-start p-4 overflow-y-auto custom-scrollbar animate-fade-in">
+          <div className="w-full max-w-5xl mt-4 md:mt-8 mb-20 animate-scale-in">
+            {/* Preview Toolbar */}
+            <div className="flex justify-between items-center mb-6 sticky top-0 z-[70] bg-[var(--color-bg-dark)]/90 border border-[var(--color-primary)] p-3 backdrop-blur-md shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+              <div className="flex items-center gap-3">
+                <span className="w-2 h-4 bg-[var(--color-accent-cyan)] animate-pulse"></span>
+                <div className="text-[var(--color-accent-cyan)] font-bold tracking-widest text-xs md:text-sm">
+                  [ PREVIEW_MODE: <span className="text-[var(--color-primary)]">{previewType}</span> ]
+                </div>
+              </div>
+              <button
+                onClick={closePreview}
+                className="text-[var(--color-bg-dark)] bg-[var(--color-primary)] hover:bg-[var(--color-accent-cyan)] hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] transition-all font-bold text-xs md:text-sm cursor-pointer px-4 py-2 uppercase tracking-widest"
+              >
+                &lt; RETURN_TO_DB
+              </button>
+            </div>
+            
+            {/* Render Result Card */}
+            <div className="flex justify-center drop-shadow-2xl">
+              <ResultCard 
+                code={previewType} 
+                title={archetypes[previewType].name} 
+                description={archetypes[previewType].description} 
+                tags={archetypes[previewType].tags}
+                subDimensions={mockSubDimensions}
+                userName="SYS_ADMIN"
+                role={archetypes[previewType].role}
+                avatarId={archetypes[previewType].avatarId}
+                layoutMode="B"
+              />
             </div>
           </div>
         </div>

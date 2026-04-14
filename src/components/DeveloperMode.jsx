@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { questions } from '../data/questions.js'
 import { archetypes } from '../data/archetypes.js'
 
-export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipLoading, setSkipLoading, useCrtCurve, setUseCrtCurve }) {
+export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipLoading, setSkipLoading, fastLoading, setFastLoading, useCrtCurve, setUseCrtCurve }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -49,6 +49,16 @@ export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipL
                   className="mr-3 w-5 h-5 accent-[var(--color-primary)] bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)]"
                 />
                 <span className="uppercase tracking-widest text-sm">Skip Loading Animation</span>
+              </label>
+
+              <label className="flex items-center cursor-pointer text-[var(--color-primary)] hover:text-[var(--color-accent-cyan)] transition-colors">
+                <input
+                  type="checkbox"
+                  checked={fastLoading}
+                  onChange={(e) => setFastLoading(e.target.checked)}
+                  className="mr-3 w-5 h-5 accent-[var(--color-primary)] bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)]"
+                />
+                <span className="uppercase tracking-widest text-sm">Fast Loading (5x)</span>
               </label>
 
               <label className="flex items-center cursor-pointer text-[var(--color-primary)] hover:text-[var(--color-accent-cyan)] transition-colors">

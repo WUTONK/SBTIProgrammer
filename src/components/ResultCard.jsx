@@ -184,7 +184,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
           <div className="col-span-3 border-r border-dashed border-[var(--color-primary)]" style={{ paddingRight: '32px', paddingLeft: '16px' }}>
             {renderHeader()}
             {renderTitle()}
-            <Divider title="[ 代表 ]" noPadding />
+            <Divider title="[ 代表人物 ]" noPadding />
             {renderAvatar()}
             <div className="mt-4"><p className="text-[10px] leading-relaxed mb-3">{description}</p></div>
             {renderFooter()}
