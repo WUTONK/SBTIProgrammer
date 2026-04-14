@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { questions } from '../data/questions.js';
 
 /**
  * 辅助组件：用于在像素网格中绘制单个“像素块”
@@ -228,9 +229,14 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
             <div className="flex justify-between w-full">
               {Array.from({ length: totalQuestions }).map((_, colIdx) => {
                 const answered = answers[colIdx];
-                const ansChar = answered ? answered.text.charAt(0).toUpperCase() : null;
-                // 映射选项到行数：A->1, B->2, C->3
-                const ansNum = ansChar === 'A' ? 1 : ansChar === 'B' ? 2 : ansChar === 'C' ? 3 : null;
+                let ansNum = null;
+                if (answered) {
+                  const qOptions = questions[colIdx].options;
+                  const optIndex = qOptions.findIndex(opt => opt.text === answered.text);
+                  if (optIndex !== -1) {
+                    ansNum = optIndex + 1; // 0 -> 1, 1 -> 2, 2 -> 3
+                  }
+                }
                 const isCurrent = currentIndex === colIdx;
 
                 return (

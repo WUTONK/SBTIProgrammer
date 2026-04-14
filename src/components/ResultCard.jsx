@@ -157,7 +157,7 @@ const ResultCard = forwardRef(({ code, title, description, subDimensions, userNa
   `;
 
   return (
-    <div ref={ref} className={containerClasses} style={{ fontFamily: "'VT323', 'Share Tech Mono', 'Courier New', monospace", color: '#ff9900', textTransform: 'uppercase', letterSpacing: '1px' }}>
+    <div ref={ref} className={containerClasses} style={{ fontFamily: "'Fusion Pixel', 'VT323', 'Share Tech Mono', 'Courier New', monospace", color: '#ff9900', textTransform: 'uppercase', letterSpacing: '1px' }}>
       <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-[var(--color-accent-cyan)]"></div>
       <div className="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-[var(--color-accent-cyan)]"></div>
       <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-[var(--color-accent-cyan)]"></div>

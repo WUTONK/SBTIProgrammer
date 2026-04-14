@@ -15,15 +15,44 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
     try {
       setIsGenerating(true)
       
+      // 临时移除 CRT 效果以确保字体渲染正确，并还原关闭 CRT 时的内容
+      const crtContainer = document.querySelector('.crt');
+      let hadCrtCurve = false;
+      
+      if (crtContainer && crtContainer.classList.contains('crt-curve')) {
+        hadCrtCurve = true;
+        crtContainer.classList.remove('crt-curve');
+      }
+      
+      // 禁用动画以防止截图时出现重叠或错位
+      const style = document.createElement('style');
+      style.innerHTML = `
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      `;
+      document.head.appendChild(style);
+
+      // 强制重绘并等待 DOM 更新
+      if (crtContainer) void crtContainer.offsetWidth;
+      await new Promise(resolve => setTimeout(resolve, 150));
+
       const dataUrl = await htmlToImage.toPng(cardRef.current, {
         quality: 1,
         pixelRatio: 2,
-        backgroundColor: '#000000',
+        backgroundColor: '#050300',
         style: {
           transform: 'scale(1)',
           transformOrigin: 'top left',
-        }
+        },
       });
+
+      // 恢复 CRT 效果和动画
+      document.head.removeChild(style);
+      if (hadCrtCurve && crtContainer) {
+        crtContainer.classList.add('crt-curve');
+      }
 
       const link = document.createElement('a')
       link.download = `developer-profile-${displayResult.typeCode.toLowerCase()}.png`
@@ -42,8 +71,9 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
   if (!displayResult) return null
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start p-4 py-8 space-y-6 relative w-full min-h-full overflow-y-auto animate-mac-zoom-vertical-container">
-      <div className="w-full flex flex-col items-center space-y-6 animate-mac-zoom-vertical-content my-auto">
+    <div className="flex-1 flex flex-col items-center p-4 py-8 space-y-6 relative w-full min-h-full overflow-y-auto animate-mac-zoom-vertical-container">
+      <div className="flex-1 min-h-0"></div>
+      <div className="w-full flex flex-col items-center space-y-6 animate-mac-zoom-vertical-content shrink-0">
         {/* The Result Card to be captured */}
         <div className="flex justify-center w-full animate-slide-up flex-shrink-0">
           <ResultCard 
@@ -88,6 +118,7 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
           {'>'} ANALYSIS COMPLETE. PRESS ANY KEY TO CONTINUE... <span className="animate-blink">_</span>
         </p>
       </div>
+      <div className="flex-1 min-h-0"></div>
     </div>
   )
 }

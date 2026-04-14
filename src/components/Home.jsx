@@ -138,7 +138,7 @@ export default function Home({ onStart }) {
       {showGallery && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4">
           {/* 关键修复 1：将 max-h-[90vh] 改为固定的 h-[85vh]，并去掉了可能干扰的 overflow-hidden */}
-          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-6xl h-[85vh] flex flex-col bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] shadow-[0_0_50px_rgba(255,153,0,0.2)] animate-fade-in relative">
+          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-6xl h-[85vh] flex flex-col bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] shadow-[0_0_50px_rgba(255,153,0,0.2)] animate-mac-zoom relative">
             
             {/* Terminal Header (保持不变) */}
             <div className="flex justify-between items-center p-2 md:p-3 border-b-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 relative z-10 shrink-0">
@@ -207,7 +207,7 @@ export default function Home({ onStart }) {
       {/* Preview Modal */}
       {previewType && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-fade-in">
-          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-5xl h-[85vh] max-h-[850px] flex flex-col animate-fade-in">
+          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-5xl h-[85vh] max-h-[850px] flex flex-col animate-mac-zoom">
             {/* Preview Toolbar */}
             <div className="shrink-0 flex justify-between items-center mb-6 z-[70] bg-[var(--color-bg-dark)]/90 border border-[var(--color-primary)] p-3 shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-3">
@@ -225,8 +225,9 @@ export default function Home({ onStart }) {
             </div>
             
             {/* Render Result Card */}
-            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar drop-shadow-2xl pb-8">
-              <div className="flex justify-center">
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar drop-shadow-2xl pb-8 flex flex-col">
+              <div className="flex-1 min-h-0"></div>
+              <div className="flex justify-center shrink-0 w-full">
                 <ResultCard 
                   code={previewType} 
                   title={archetypes[previewType].name} 
@@ -239,6 +240,7 @@ export default function Home({ onStart }) {
                   layoutMode="B"
                 />
               </div>
+              <div className="flex-1 min-h-0"></div>
             </div>
           </div>
         </div>
