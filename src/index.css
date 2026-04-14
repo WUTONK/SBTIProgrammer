@@ -207,9 +207,57 @@ body {
 
 .crt-curve .crt-content-wrapper {
   transform: rotateX(1.5deg) scale(0.96);
-  border-radius: 40px;
+  border-radius: 16px;
   box-shadow: inset 0 0 100px rgba(0,0,0,0.9), 0 0 20px rgba(255, 153, 0, 0.2);
   overflow: hidden;
   transition: all 0.5s ease-out;
   border: 1px solid rgba(255, 153, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .crt-curve .crt-content-wrapper {
+    border-radius: 40px;
+  }
+}
+
+/* Retro Mac Window Zoom Animation */
+@keyframes mac-zoom-container {
+  0% { transform: scale(0.1); background-color: transparent; box-shadow: none; }
+  7.1% { transform: scale(0.3); background-color: transparent; box-shadow: none; }
+  14.3% { transform: scale(0.5); background-color: transparent; box-shadow: none; }
+  21.4% { transform: scale(0.7); background-color: transparent; box-shadow: none; }
+  28.6% { transform: scale(0.9); background-color: transparent; box-shadow: none; }
+  35.7%, 100% { transform: scale(1); background-color: var(--color-bg-dark); }
+}
+
+@keyframes mac-zoom-content {
+  0%, 35.6% { opacity: 0; visibility: hidden; clip-path: polygon(0% 0%, 0% 0%, 0% 25%, 0% 25%, 0% 25%, 0% 25%); }
+  35.7% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 0% 0%, 0% 25%, 0% 25%, 0% 25%, 0% 25%); }
+  
+  /* Row 1 Sweep */
+  51.7% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 100% 0%, 100% 25%, 100% 25%, 0% 25%, 0% 25%); }
+  
+  /* Row 2 Jump */
+  51.701% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 100% 0%, 100% 25%, 0% 25%, 0% 50%, 0% 50%); }
+  /* Row 2 Sweep */
+  67.8% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 100% 0%, 100% 25%, 100% 25%, 100% 50%, 0% 50%); }
+  
+  /* Row 3 Jump */
+  67.801% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%, 0% 75%, 0% 75%); }
+  /* Row 3 Sweep */
+  83.9% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 100% 50%, 100% 75%, 0% 75%); }
+  
+  /* Row 4 Jump */
+  83.901% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 0% 75%, 0% 100%, 0% 100%); }
+  /* Row 4 Sweep */
+  100% { opacity: 1; visibility: visible; clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 100% 75%, 100% 100%, 0% 100%); }
+}
+
+.animate-mac-zoom {
+  animation: mac-zoom-container 0.7s step-end forwards;
+  transform-origin: center center;
+}
+
+.animate-mac-zoom > * {
+  animation: mac-zoom-content 0.7s linear forwards;
 }

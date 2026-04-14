@@ -23,7 +23,7 @@ export default function App() {
   const [quizIndex, setQuizIndex] = useState(0)
   const [skipLoading, setSkipLoading] = useState(false)
   const [fastLoading, setFastLoading] = useState(false)
-  const [useCrtCurve, setUseCrtCurve] = useState(false)
+  const [useCrtCurve, setUseCrtCurve] = useState(true)
 
   const handleStart = useCallback((name) => {
     setUserName(name || 'GUEST')

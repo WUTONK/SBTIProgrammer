@@ -137,7 +137,7 @@ export default function Home({ onStart }) {
       {/* Gallery Modal */}
       {showGallery && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4">
-          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-6xl h-[85vh] max-h-[800px] flex flex-col bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] overflow-hidden shadow-[0_0_50px_rgba(255,153,0,0.2)] animate-scale-in relative">
+          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-6xl h-[85vh] max-h-[800px] flex flex-col bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] overflow-hidden shadow-[0_0_50px_rgba(255,153,0,0.2)] animate-mac-zoom relative">
             
             {/* Terminal Header */}
             <div className="flex justify-between items-center p-2 md:p-3 border-b-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 relative z-10 shrink-0">
@@ -206,7 +206,7 @@ export default function Home({ onStart }) {
       {/* Preview Modal */}
       {previewType && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-fade-in">
-          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-5xl h-[85vh] max-h-[850px] flex flex-col animate-scale-in">
+          <div className="w-[95%] md:w-[85%] lg:w-[75%] max-w-5xl h-[85vh] max-h-[850px] flex flex-col animate-mac-zoom">
             {/* Preview Toolbar */}
             <div className="shrink-0 flex justify-between items-center mb-6 z-[70] bg-[var(--color-bg-dark)]/90 border border-[var(--color-primary)] p-3 shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-3">

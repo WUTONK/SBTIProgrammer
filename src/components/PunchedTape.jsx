@@ -33,22 +33,16 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
     prevAnswersRef.current = JSON.parse(JSON.stringify(answers));
   }, [answers]);
 
-  const rows = [0, 1, 2];
-  const getHexPreview = (rowIdx) => {
-    let result = "";
-    for (let i = 0; i < 10; i++) {
-      const idx = rowIdx * 10 + i;
-      result += answers[idx] ? answers[idx].text.charAt(0) : "-";
-    }
-    return result;
-  };
-
   const isPunching = lastAction.type === 'punch' && (Date.now() - lastAction.timestamp < 200);
   const isCorrecting = lastAction.type === 'correct' && (Date.now() - lastAction.timestamp < 800);
-  const pixelCircle = 'polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)';
+
+  // IBM Punched Card Colors
+  const cardBg = '#E4DAC4';
+  const inkColor = '#8B635C';
+  const holeColor = 'var(--color-bg-dark)';
 
   return (
-    <div className="flex flex-col items-center w-full relative">
+    <div className="flex flex-col items-center w-full relative overflow-x-auto scrollbar-hide py-4 px-4">
       <style>{`
         @keyframes pixelSparkAnim {
           0% { opacity: 1; transform: scale(0.8); }
@@ -61,7 +55,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
         }
       `}</style>
 
-      {/* 8-bit 像素打孔机核心组件 — 缩小尺寸从 scale(4) 到 scale(2.5) */}
+      {/* 8-bit 像素打孔机核心组件 */}
       <div className={`relative mb-2 z-30 transition-opacity duration-200 ${isFalling ? 'opacity-0' : 'opacity-100'}`} style={{ width: '90px', height: '80px' }}>
         <div
           className="absolute top-0 left-0 origin-top-left"
@@ -134,47 +128,80 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
       </div>
 
       {/* 纸带主体 */}
-      <div ref={tapeBodyRef} className={`relative z-40 ${isShaking ? 'animate-tape-shake' : ''}`}>
-        <div className={`relative bg-[#d1c4a9] text-black p-2 font-mono text-[10px] md:text-xs shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#b3a68c] w-[340px] ${isFalling ? 'pointer-events-none' : ''}`}>
-          {rows.map(rowIdx => (
-            <div key={rowIdx} className="flex items-center gap-3 py-1 border-b border-black/10 last:border-0">
-              <div className="flex gap-1.5">
-                {[...Array(10)].map((_, colIdx) => {
-                  const qIdx = rowIdx * 10 + colIdx;
-                  const answered = !!answers[qIdx];
-                  const current = currentIndex === qIdx;
+      <div 
+        ref={tapeBodyRef} 
+        className={`relative shrink-0 shadow-[4px_4px_15px_rgba(0,0,0,0.5)] transition-transform duration-300 ${isShaking ? 'animate-tape-shake' : ''} ${isFalling ? 'pointer-events-none' : ''}`}
+        style={{ 
+          width: '760px', 
+          backgroundColor: cardBg,
+          color: inkColor,
+          fontFamily: "'Courier New', Courier, monospace",
+          clipPath: 'polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px)',
+          padding: '12px 16px 20px 30px',
+          userSelect: 'none',
+          border: '1px solid #C4B9A3'
+        }}
+      >
+        {/* 左侧垂直印刷文字 */}
+        <div 
+          className="absolute left-2 top-1/2 -translate-y-1/2 -rotate-90 text-[7px] font-bold tracking-widest opacity-70 origin-center whitespace-nowrap"
+        >
+          PROGRAMMER SBTI DATA CENTER &lt;wutonk.xyz&gt;
+        </div>
+
+        {/* 顶部印刷文字 */}
+        <div className="flex justify-between text-[11px] font-bold mb-3 tracking-widest uppercase opacity-80 pl-2">
+          <span>{`HELLO, WORLD. THIS IS PROGRAMMER SBTI. AWAITING INPUT...`}</span>
+          <span>CDL 0815</span>
+        </div>
+
+        {/* 答题孔位网格 */}
+        <div className="flex justify-between w-full">
+          {Array.from({ length: totalQuestions }).map((_, colIdx) => {
+            const answered = answers[colIdx];
+            const ansChar = answered ? answered.text.charAt(0).toUpperCase() : null;
+            // 映射选项到行数：A->1, B->2, C->3, D->4
+            const ansNum = ansChar === 'A' ? 1 : ansChar === 'B' ? 2 : ansChar === 'C' ? 3 : ansChar === 'D' ? 4 : null;
+            const isCurrent = currentIndex === colIdx;
+
+            return (
+              <div 
+                key={colIdx}
+                onClick={() => !isFalling && !isShaking && onJump(colIdx)}
+                className={`flex flex-col items-center cursor-pointer group w-[18px] transition-colors ${isCurrent ? 'bg-black/10 rounded-sm' : 'hover:bg-black/5 rounded-sm'}`}
+              >
+                {/* 列号 (题号 1-30) */}
+                <div className={`h-6 flex items-center justify-center text-[11px] font-bold my-[2px] ${isCurrent ? 'text-red-600 scale-125' : 'opacity-70'}`}>
+                  {colIdx + 1}
+                </div>
+
+                {/* 1-3 行 */}
+                {[1, 2, 3].map((rowNum) => {
+                  const isPunched = ansNum === rowNum;
                   return (
-                    <div 
-                      key={colIdx}
-                      onClick={() => !isFalling && !isShaking && onJump(qIdx)}
-                      className={`w-3 h-3 border-2 cursor-pointer transition-all flex items-center justify-center
-                        ${answered ? 'bg-black border-black' : 'bg-transparent border-black/30'}
-                        ${current ? 'ring-2 ring-red-500 animate-pulse scale-110 z-10' : 'hover:scale-125 hover:bg-black/20'}`}
-                      style={{ clipPath: pixelCircle }}
-                    >
-                      {answered && <div className="w-1 h-1 bg-white/20" style={{ clipPath: pixelCircle }}></div>}
+                    <div key={rowNum} className="relative w-full h-5 flex items-center justify-center my-[1px]">
+                      {isPunched ? (
+                        <div 
+                          className="absolute w-[10px] h-[16px] border border-black/20"
+                          style={{ backgroundColor: holeColor, boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.8)' }}
+                        ></div>
+                      ) : (
+                        <span className={`text-[11px] font-bold ${isCurrent ? 'opacity-80 text-red-800' : 'opacity-60'} group-hover:opacity-100 transition-opacity`}>
+                          {rowNum}
+                        </span>
+                      )}
                     </div>
                   );
                 })}
               </div>
-              <div className="w-1"></div>
-              <div className="w-10 opacity-60 font-bold scale-90 whitespace-nowrap text-center">
-                {String(rowIdx * 10 + 1).padStart(2, '0')}-{String(rowIdx * 10 + 10).padStart(2, '0')}
-              </div>
-              <div className="w-1"></div>
-              <div className={`tracking-widest font-bold flex gap-0.5 ${currentIndex >= rowIdx * 10 && currentIndex < (rowIdx + 1) * 10 ? 'text-red-600' : 'text-black'}`}>
-                {getHexPreview(rowIdx).split('').map((char, i) => (
-                  <span key={i} className={char !== '-' ? 'bg-black/10 px-0.5' : ''}>{char}</span>
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
       {isCorrecting && !isFalling && (
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 w-screen h-8 bg-white/40 backdrop-blur-sm z-50 pointer-events-none flex items-center justify-center border-y-2 border-white animate-correct-slide">
-          <span className="text-[10px] text-white font-bold tracking-widest">REPAIRING_TAPE...</span>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-screen h-8 bg-white/40 backdrop-blur-sm z-50 pointer-events-none flex items-center justify-center border-y-2 border-white animate-correct-slide">
+          <span className="text-[10px] text-white font-bold tracking-widest">REPAIRING_CARD...</span>
         </div>
       )}
     </div>
