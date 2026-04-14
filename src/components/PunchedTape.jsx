@@ -1,5 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 
+/**
+ * 辅助组件：用于在像素网格中绘制单个“像素块”
+ */
+const SpriteBlock = ({ x, y, w, h, bg, className = '' }) => (
+  <div
+    className={`absolute ${bg} ${className}`}
+    style={{
+      left: `${x}px`,
+      top: `${y}px`,
+      width: `${w}px`,
+      height: `${h}px`,
+    }}
+  />
+);
+
 export default function PunchedTape({ currentIndex, answers, totalQuestions, onJump, isShaking, isFalling, tapeBodyRef }) {
   const [lastAction, setLastAction] = useState({ type: null, timestamp: 0 });
   const prevAnswersRef = useRef([]);
@@ -34,15 +49,91 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
 
   return (
     <div className="flex flex-col items-center w-full relative">
-      {/* 像素打孔机 — 下落时隐藏 */}
-      <div className={`relative mb-2 z-30 transition-opacity duration-200 ${isFalling ? 'opacity-0' : ''}`}>
-        <div className={`w-16 h-12 bg-[var(--color-primary-dark)] border-4 border-[var(--color-primary)] relative flex items-end justify-center pb-1 transition-transform ${isPunching ? 'translate-y-1' : ''}`}
-             style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 80% 100%, 20% 100%, 0 70%)' }}>
-          <div className="w-8 h-2 bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)] mb-1"></div>
+      <style>{`
+        @keyframes pixelSparkAnim {
+          0% { opacity: 1; transform: scale(0.8); }
+          30% { opacity: 1; transform: scale(1.2); }
+          60% { opacity: 1; transform: scale(1); }
+          100% { opacity: 0; transform: scale(1); }
+        }
+        .animate-pixel-spark {
+          animation: pixelSparkAnim 0.15s steps(1, end) forwards;
+        }
+      `}</style>
+
+      {/* 8-bit 像素打孔机核心组件 — 缩小尺寸从 scale(4) 到 scale(2.5) */}
+      <div className={`relative mb-2 z-30 transition-opacity duration-200 ${isFalling ? 'opacity-0' : 'opacity-100'}`} style={{ width: '90px', height: '80px' }}>
+        <div
+          className="absolute top-0 left-0 origin-top-left"
+          style={{ width: '36px', height: '32px', transform: 'scale(2.5)' }}
+        >
+          {/* LAYER 2: C型机器黑色外轮廓 */}
+          <SpriteBlock x={2} y={1} w={30} h={10} bg="bg-zinc-900" />
+          <SpriteBlock x={2} y={11} w={12} h={10} bg="bg-zinc-900" />
+          <SpriteBlock x={0} y={21} w={36} h={11} bg="bg-zinc-900" />
+
+          {/* LAYER 3: 工业灰主色 */}
+          <SpriteBlock x={3} y={2} w={28} h={8} bg="bg-zinc-600" />
+          <SpriteBlock x={3} y={10} w={10} h={12} bg="bg-zinc-600" />
+          <SpriteBlock x={1} y={22} w={34} h={9} bg="bg-zinc-600" />
+
+          {/* LAYER 4: 像素高光 */}
+          <SpriteBlock x={3} y={2} w={28} h={1} bg="bg-zinc-400" />
+          <SpriteBlock x={3} y={3} w={1} h={7} bg="bg-zinc-400" />
+          <SpriteBlock x={3} y={10} w={1} h={12} bg="bg-zinc-400" />
+          <SpriteBlock x={13} y={22} w={22} h={1} bg="bg-zinc-400" />
+          <SpriteBlock x={1} y={22} w={1} h={9} bg="bg-zinc-400" />
+
+          {/* LAYER 5: 像素阴影 */}
+          <SpriteBlock x={30} y={3} w={1} h={7} bg="bg-zinc-800" />
+          <SpriteBlock x={13} y={9} w={18} h={1} bg="bg-zinc-800" />
+          <SpriteBlock x={12} y={10} w={1} h={12} bg="bg-zinc-800" />
+          <SpriteBlock x={34} y={23} w={1} h={8} bg="bg-zinc-800" />
+          <SpriteBlock x={2} y={30} w={33} h={1} bg="bg-zinc-800" />
+
+          {/* LAYER 6: 细节 */}
+          <SpriteBlock x={6} y={13} w={4} h={1} bg="bg-zinc-800" />
+          <SpriteBlock x={6} y={16} w={4} h={1} bg="bg-zinc-800" />
+          <SpriteBlock x={6} y={19} w={4} h={1} bg="bg-zinc-800" />
+          <SpriteBlock x={10} y={4} w={6} h={2} bg="bg-red-600" />
+          <SpriteBlock
+            x={24} y={4} w={2} h={2}
+            bg={isPunching ? "bg-amber-300" : "bg-amber-600"}
+            className={isPunching ? "shadow-[0_0_4px_#fcd34d]" : ""}
+          />
+
+          {/* LAYER 7: 动态针头 */}
+          <div
+            className="absolute bg-zinc-300 z-10"
+            style={{
+              left: '21px',
+              width: '4px',
+              height: '10px',
+              borderStyle: 'solid',
+              borderColor: '#18181b',
+              borderWidth: '0 1px 1px 1px',
+              top: isPunching ? '12px' : '8px',
+              transition: 'top 0.1s steps(2, end)',
+            }}
+          />
+          <SpriteBlock x={19} y={10} w={8} h={4} bg="bg-zinc-900" className="z-20" />
+          <SpriteBlock x={20} y={10} w={6} h={3} bg="bg-zinc-800" className="z-20" />
+
+          {/* LAYER 8: 十字火花 */}
+          <div
+            className={`absolute z-30 origin-center ${isPunching ? 'animate-pixel-spark' : 'opacity-0'}`}
+            style={{ left: '21px', top: '19px', width: '4px', height: '4px' }}
+          >
+            <SpriteBlock x={1} y={1} w={2} h={2} bg="bg-white" />
+            <SpriteBlock x={1} y={0} w={2} h={1} bg="bg-amber-400" />
+            <SpriteBlock x={1} y={3} w={2} h={1} bg="bg-amber-400" />
+            <SpriteBlock x={0} y={1} w={1} h={2} bg="bg-amber-400" />
+            <SpriteBlock x={3} y={1} w={1} h={2} bg="bg-amber-400" />
+          </div>
         </div>
       </div>
 
-      {/* 纸带主体 — 外部 ref 供父组件用 Web Animations API 控制下落 */}
+      {/* 纸带主体 */}
       <div ref={tapeBodyRef} className={`relative z-40 ${isShaking ? 'animate-tape-shake' : ''}`}>
         <div className={`relative bg-[#d1c4a9] text-black p-2 font-mono text-[10px] md:text-xs shadow-[4px_4px_0_rgba(0,0,0,0.5)] border-2 border-[#b3a68c] w-[340px] ${isFalling ? 'pointer-events-none' : ''}`}>
           {rows.map(rowIdx => (
@@ -66,17 +157,11 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
                   );
                 })}
               </div>
-
-              {/* 移除 w-px 装饰线，改用间距 */}
               <div className="w-1"></div>
-
               <div className="w-10 opacity-60 font-bold scale-90 whitespace-nowrap text-center">
                 {String(rowIdx * 10 + 1).padStart(2, '0')}-{String(rowIdx * 10 + 10).padStart(2, '0')}
               </div>
-
-              {/* 移除 w-px 装饰线，改用间距 */}
               <div className="w-1"></div>
-
               <div className={`tracking-widest font-bold flex gap-0.5 ${currentIndex >= rowIdx * 10 && currentIndex < (rowIdx + 1) * 10 ? 'text-red-600' : 'text-black'}`}>
                 {getHexPreview(rowIdx).split('').map((char, i) => (
                   <span key={i} className={char !== '-' ? 'bg-black/10 px-0.5' : ''}>{char}</span>
