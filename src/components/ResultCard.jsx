@@ -31,7 +31,7 @@ const Divider = ({ title, noPadding = false }) => (
   </div>
 );
 
-const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId, layoutMode = 'A', tags = [] }, ref) => {
+const ResultCard = forwardRef(({ code, title, description, subDimensions, userName, role, avatarId, tags = [] }, ref) => {
   const dim1 = code[0]; const dim2 = code[1]; const dim3 = code[2]; const dim4 = code[3];
   const dimensions = [dimensionData.dim1[dim1], dimensionData.dim2[dim2], dimensionData.dim3[dim3], dimensionData.dim4[dim4]];
   const displayUserName = (userName != null && String(userName).trim()) || 'GUEST'

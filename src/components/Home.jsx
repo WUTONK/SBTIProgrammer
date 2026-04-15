@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { archetypes } from '../data/archetypes.js';
 import ResultCard from './ResultCard';
 
-export default function Home({ onStart, galleryLayoutMode = 'A' }) {
+export default function Home({ onStart }) {
   const [showGallery, setShowGallery] = useState(false);
   const [userName, setUserName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -181,42 +181,20 @@ export default function Home({ onStart, galleryLayoutMode = 'A' }) {
                         <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
                         <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
 
-                        {/* Layout Mode Content */}
-                        {galleryLayoutMode === 'A' ? (
-                          <>
-                            {/* Mode A: Type -> Avatar -> Name */}
-                            <div className="text-4xl font-black text-[var(--color-primary)] mb-1 group-hover:text-[var(--color-accent-cyan)] transition-colors tracking-tighter" style={{ textShadow: '0 0 8px rgba(255,153,0,0.5)' }}>
-                              {key}
-                            </div>
-                            <div className="w-20 h-20 mb-3 shrink-0" style={{ marginTop: '4px' }}>
-                              <img 
-                                src={`/avatar/${data.avatarId}.webp`} 
-                                alt={data.name}
-                                className="w-full h-full object-cover border border-[var(--color-primary)]/50 bg-[var(--color-bg-dark)]"
-                              />
-                            </div>
-                            <div className="text-[var(--color-bg-dark)] bg-[var(--color-accent-cyan)] font-bold mb-3 text-xs md:text-sm px-2 py-0.5 shadow-[0_0_8px_rgba(0,255,255,0.6)]">
-                              {data.name}
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            {/* Mode B: Type -> Name -> Avatar */}
-                            <div className="text-4xl font-black text-[var(--color-primary)] mb-1 group-hover:text-[var(--color-accent-cyan)] transition-colors tracking-tighter" style={{ textShadow: '0 0 8px rgba(255,153,0,0.5)' }}>
-                              {key}
-                            </div>
-                            <div className="text-[var(--color-bg-dark)] bg-[var(--color-accent-cyan)] font-bold text-xs md:text-sm px-2 py-0.5 shadow-[0_0_8px_rgba(0,255,255,0.6)]">
-                              {data.name}
-                            </div>
-                            <div className="w-20 h-20 mb-3 shrink-0" style={{ marginTop: '12px' }}>
-                              <img 
-                                src={`/avatar/${data.avatarId}.webp`} 
-                                alt={data.name}
-                                className="w-full h-full object-cover border border-[var(--color-primary)]/50 bg-[var(--color-bg-dark)]"
-                              />
-                            </div>
-                          </>
-                        )}
+                        {/* Card Content: Type -> Name -> Avatar */}
+                        <div className="text-4xl font-black text-[var(--color-primary)] mb-1 group-hover:text-[var(--color-accent-cyan)] transition-colors tracking-tighter" style={{ textShadow: '0 0 8px rgba(255,153,0,0.5)' }}>
+                          {key}
+                        </div>
+                        <div className="text-[var(--color-bg-dark)] bg-[var(--color-accent-cyan)] font-bold text-xs md:text-sm px-2 py-0.5 shadow-[0_0_8px_rgba(0,255,255,0.6)]">
+                          {data.name}
+                        </div>
+                        <div className="w-20 h-20 mb-3 shrink-0" style={{ marginTop: '12px' }}>
+                          <img 
+                            src={`/avatar/${data.avatarId}.webp`} 
+                            alt={data.name}
+                            className="w-full h-full object-cover border border-[var(--color-primary)]/50 bg-[var(--color-bg-dark)]"
+                          />
+                        </div>
 
                         <div className="text-[var(--color-text-muted)] text-xs leading-relaxed line-clamp-3 flex-1 flex items-center">
                           {data.role}
@@ -268,7 +246,6 @@ export default function Home({ onStart, galleryLayoutMode = 'A' }) {
                   userName="SYS_ADMIN"
                   role={archetypes[previewType].role}
                   avatarId={archetypes[previewType].avatarId}
-                  layoutMode="B"
                 />
               </div>
               <div className="flex-1 min-h-0"></div>

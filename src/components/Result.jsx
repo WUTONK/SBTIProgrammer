@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import * as htmlToImage from 'html-to-image'
 import ResultCard from './ResultCard'
 
-export default function Result({ result, onRestart, userName, desktopLayoutMode }) {
+export default function Result({ result, onRestart, userName }) {
   const cardRef = useRef(null)
   const [isGenerating, setIsGenerating] = useState(false)
 
@@ -86,7 +86,6 @@ export default function Result({ result, onRestart, userName, desktopLayoutMode 
             userName={userName}
             role={displayResult.role}
             avatarId={displayResult.avatarId}
-            layoutMode={desktopLayoutMode}
           />
         </div>
 
