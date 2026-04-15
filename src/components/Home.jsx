@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { archetypes } from '../data/archetypes.js';
 import ResultCard from './ResultCard';
 
-export default function Home({ onStart }) {
+export default function Home({ onStart, galleryLayoutMode = 'A' }) {
   const [showGallery, setShowGallery] = useState(false);
   const [userName, setUserName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -129,7 +129,7 @@ export default function Home({ onStart }) {
           </button>
 
           <p className="text-[var(--color-text-muted)] text-xs mt-2">
-            不上传结果 | 题目无需全部作答 | WUTONK@2026
+            V1.0.0 | 结果不上传 | WUTONK@2026
           </p>
         </div>
       </div>
@@ -171,25 +171,56 @@ export default function Home({ onStart }) {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 pb-12">
                   {Object.entries(archetypes).map(([key, data]) => (
-                    <div 
-                      key={key} 
-                      onClick={() => handlePreview(key)}
-                      className="retro-card flex flex-col items-center justify-start p-5 text-center transition-all duration-300 cursor-pointer group hover:border-[var(--color-accent-cyan)] hover:bg-[var(--color-primary)]/5 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,255,255,0.15)] relative overflow-hidden"
-                      style={{ minHeight: '220px' }}
-                    >
-                      {/* Decorative corner accents */}
-                      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
-                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
+                      <div 
+                        key={key} 
+                        onClick={() => handlePreview(key)}
+                        className="retro-card flex flex-col items-center justify-start p-5 text-center transition-all duration-300 cursor-pointer group hover:border-[var(--color-accent-cyan)] hover:bg-[var(--color-primary)]/5 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,255,255,0.15)] relative overflow-hidden"
+                        style={{ minHeight: '260px' }}
+                      >
+                        {/* Decorative corner accents */}
+                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
+                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[var(--color-primary)] opacity-50 group-hover:border-[var(--color-accent-cyan)] group-hover:opacity-100 transition-colors"></div>
 
-                      <div className="text-4xl font-black text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent-cyan)] transition-colors tracking-tighter" style={{ textShadow: '0 0 8px rgba(255,153,0,0.5)' }}>
-                        {key}
-                      </div>
-                      <div className="text-[var(--color-bg-dark)] bg-[var(--color-accent-cyan)] font-bold mb-3 text-xs md:text-sm px-2 py-0.5 shadow-[0_0_8px_rgba(0,255,255,0.6)]">
-                        {data.name}
-                      </div>
-                      <div className="text-[var(--color-text-muted)] text-xs leading-relaxed line-clamp-3 flex-1 flex items-center">
-                        {data.role}
-                      </div>
+                        {/* Layout Mode Content */}
+                        {galleryLayoutMode === 'A' ? (
+                          <>
+                            {/* Mode A: Type -> Avatar -> Name */}
+                            <div className="text-4xl font-black text-[var(--color-primary)] mb-1 group-hover:text-[var(--color-accent-cyan)] transition-colors tracking-tighter" style={{ textShadow: '0 0 8px rgba(255,153,0,0.5)' }}>
+                              {key}
+                            </div>
+                            <div className="w-20 h-20 mb-3 shrink-0" style={{ marginTop: '4px' }}>
+                              <img 
+                                src={`/avatar/${data.avatarId}.webp`} 
+                                alt={data.name}
+                                className="w-full h-full object-cover border border-[var(--color-primary)]/50 bg-[var(--color-bg-dark)]"
+                              />
+                            </div>
+                            <div className="text-[var(--color-bg-dark)] bg-[var(--color-accent-cyan)] font-bold mb-3 text-xs md:text-sm px-2 py-0.5 shadow-[0_0_8px_rgba(0,255,255,0.6)]">
+                              {data.name}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {/* Mode B: Type -> Name -> Avatar */}
+                            <div className="text-4xl font-black text-[var(--color-primary)] mb-1 group-hover:text-[var(--color-accent-cyan)] transition-colors tracking-tighter" style={{ textShadow: '0 0 8px rgba(255,153,0,0.5)' }}>
+                              {key}
+                            </div>
+                            <div className="text-[var(--color-bg-dark)] bg-[var(--color-accent-cyan)] font-bold text-xs md:text-sm px-2 py-0.5 shadow-[0_0_8px_rgba(0,255,255,0.6)]">
+                              {data.name}
+                            </div>
+                            <div className="w-20 h-20 mb-3 shrink-0" style={{ marginTop: '12px' }}>
+                              <img 
+                                src={`/avatar/${data.avatarId}.webp`} 
+                                alt={data.name}
+                                className="w-full h-full object-cover border border-[var(--color-primary)]/50 bg-[var(--color-bg-dark)]"
+                              />
+                            </div>
+                          </>
+                        )}
+
+                        <div className="text-[var(--color-text-muted)] text-xs leading-relaxed line-clamp-3 flex-1 flex items-center">
+                          {data.role}
+                        </div>
                       
                       <div className="w-full mt-4 pt-3 border-t border-dashed border-[var(--color-primary)]/30 text-[10px] text-[var(--color-primary)] opacity-50 group-hover:opacity-100 group-hover:text-[var(--color-accent-cyan)] transition-all tracking-widest flex justify-between items-center">
                         <span>SYS.ID: {key}</span>

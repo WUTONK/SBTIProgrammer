@@ -24,6 +24,7 @@ export default function App() {
   const [skipLoading, setSkipLoading] = useState(false)
   const [fastLoading, setFastLoading] = useState(false)
   const [useCrtCurve, setUseCrtCurve] = useState(true)
+  const [galleryLayoutMode, setGalleryLayoutMode] = useState('A') // 'A' = Type above Avatar, 'B' = Type below Avatar
 
   const handleStart = useCallback((name) => {
     setUserName(name || 'GUEST')
@@ -81,7 +82,7 @@ export default function App() {
   const renderScreen = () => {
     switch (currentScreen) {
       case SCREENS.HOME:
-        return <Home onStart={handleStart} />
+        return <Home onStart={handleStart} galleryLayoutMode={galleryLayoutMode} />
       case SCREENS.QUIZ:
         return (
           <Quiz
@@ -97,7 +98,7 @@ export default function App() {
       case SCREENS.RESULT:
         return <Result result={result} onRestart={handleRestart} userName={userName} />
       default:
-        return <Home onStart={handleStart} />
+        return <Home onStart={handleStart} galleryLayoutMode={galleryLayoutMode} />
     }
   }
 
@@ -122,6 +123,8 @@ export default function App() {
         setFastLoading={setFastLoading}
         useCrtCurve={useCrtCurve}
         setUseCrtCurve={setUseCrtCurve}
+        galleryLayoutMode={galleryLayoutMode}
+        setGalleryLayoutMode={setGalleryLayoutMode}
       />
     </div>
   )

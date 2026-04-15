@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { questions } from '../data/questions.js'
 import { archetypes } from '../data/archetypes.js'
 
-export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipLoading, setSkipLoading, fastLoading, setFastLoading, useCrtCurve, setUseCrtCurve }) {
+export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipLoading, setSkipLoading, fastLoading, setFastLoading, useCrtCurve, setUseCrtCurve, galleryLayoutMode, setGalleryLayoutMode }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -70,6 +70,22 @@ export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipL
                 />
                 <span className="uppercase tracking-widest text-sm">CRT Curve Effect</span>
               </label>
+
+              <div className="flex items-center space-x-3 border-l-2 border-[var(--color-primary)]/30 pl-6">
+                <span className="uppercase tracking-widest text-sm text-[var(--color-primary)]">Gallery Layout:</span>
+                <button 
+                  onClick={() => setGalleryLayoutMode('A')}
+                  className={`px-3 py-1 text-xs border ${galleryLayoutMode === 'A' ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : 'border-[var(--color-primary)] text-[var(--color-primary)]'}`}
+                >
+                  MODE A
+                </button>
+                <button 
+                  onClick={() => setGalleryLayoutMode('B')}
+                  className={`px-3 py-1 text-xs border ${galleryLayoutMode === 'B' ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : 'border-[var(--color-primary)] text-[var(--color-primary)]'}`}
+                >
+                  MODE B
+                </button>
+              </div>
             </div>
           </section>
 
