@@ -70,6 +70,16 @@ export default function DeveloperMode({ onJumpToQuestion, onPreviewResult, skipL
                 />
                 <span className="uppercase tracking-widest text-sm">CRT Curve Effect</span>
               </label>
+
+              <label className="flex items-center cursor-pointer text-[var(--color-primary)] hover:text-[var(--color-accent-cyan)] transition-colors">
+                <input
+                  type="checkbox"
+                  checked={quizLayoutMode === 'B'}
+                  onChange={(e) => setQuizLayoutMode(e.target.checked ? 'B' : 'A')}
+                  className="mr-3 w-5 h-5 accent-[var(--color-primary)] bg-[var(--color-bg-dark)] border-2 border-[var(--color-primary)]"
+                />
+                <span className="uppercase tracking-widest text-sm">Layout B (Centered)</span>
+              </label>
             </div>
           </section>
 

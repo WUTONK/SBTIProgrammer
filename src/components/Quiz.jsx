@@ -236,29 +236,31 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
                 */}
                 <div className="flex items-start mb-10">
                   <span className="opacity-0 select-none font-bold text-xl md:text-3xl mr-4 md:mr-6 shrink-0">{'>'}</span>
-                  <h2 className="text-xl md:text-3xl font-bold text-[var(--color-primary)] uppercase glow-text leading-relaxed">
+                  <h2 className="text-xl md:text-1xl font-bold text-[var(--color-primary)] uppercase glow-text leading-relaxed">
                     {currentQuestion.text}
                   </h2>
                 </div>
                 <div className="space-y-5">
                   {currentQuestion.options.map((option, index) => (
                     <button key={index} onClick={() => handleSelect(option)} disabled={isTransitioning || isFinishing}
-                      className={`w-full flex items-center retro-btn pr-6 py-5 md:pr-8 md:py-6 uppercase transition-all ${answers[currentIndex]?.text === option.text ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
-                      <span className="opacity-0 select-none font-bold text-xl md:text-3xl mr-4 md:mr-6 shrink-0">{'>'}</span>
-                      <div className="flex items-start flex-1">
-                        <span className={`mr-3 shrink-0 text-left font-bold ${answers[currentIndex]?.text === option.text ? 'text-[var(--color-bg-dark)]' : 'text-[var(--color-accent-cyan)] glow-text-cyan'}`}>[{String.fromCharCode(65 + index)}]</span>
-                        <span className="text-left flex-1 leading-relaxed">{option.text}</span>
+                      className={`w-full flex items-center retro-btn justify-center px-6 py-5 md:px-8 md:py-6 uppercase transition-all ${answers[currentIndex]?.text === option.text ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
+                      
+                      <div className="flex items-center justify-center">
+                        <span className="text-center font-bold text-lg md:text-xl leading-relaxed">
+                          {option.text}
+                        </span>
                       </div>
                     </button>
                   ))}
                   
                   {/* 跳过此题目按钮 */}
                   <button onClick={handleSkip} disabled={isTransitioning || isFinishing}
-                    className={`w-full flex items-center retro-btn pr-6 py-5 md:pr-8 md:py-6 uppercase transition-all ${answers[currentIndex] === null ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
-                    <span className="opacity-0 select-none font-bold text-xl md:text-3xl mr-4 md:mr-6 shrink-0">{'>'}</span>
-                    <div className="flex items-start flex-1">
-                      <span className={`mr-3 shrink-0 text-left font-bold ${answers[currentIndex] === null ? 'text-[var(--color-bg-dark)]' : 'text-[var(--color-accent-cyan)] glow-text-cyan'}`}>[SKIP]</span>
-                      <span className="text-left flex-1 leading-relaxed">跳过此题目</span>
+                    className={`w-full flex items-center retro-btn justify-center px-6 py-5 md:px-8 md:py-6 uppercase transition-all ${answers[currentIndex] === null ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
+                    
+                    <div className="flex items-center justify-center">
+                      <span className="text-center font-bold text-lg md:text-xl leading-relaxed">
+                        跳过此题目
+                      </span>
                     </div>
                   </button>
                 </div>
