@@ -79,6 +79,23 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
     }, 300)
   }
 
+  const handleSkip = () => {
+    if (isTransitioning || isFinishing) return
+    const newAnswers = [...answers]
+    newAnswers[currentIndex] = null
+    setAnswers(newAnswers)
+
+    setIsTransitioning(true)
+    setTimeout(() => {
+      if (currentIndex + 1 < questions.length) {
+        setCurrentIndex(currentIndex + 1)
+        setIsTransitioning(false)
+      } else {
+        triggerFinishSequence(newAnswers)
+      }
+    }, 300)
+  }
+
   const startAnalysis = useCallback(() => {
     setPhase('scanning')
     let start = null
@@ -234,6 +251,16 @@ export default function Quiz({ onComplete, currentIndex, setCurrentIndex, answer
                       </div>
                     </button>
                   ))}
+                  
+                  {/* 跳过此题目按钮 */}
+                  <button onClick={handleSkip} disabled={isTransitioning || isFinishing}
+                    className={`w-full flex items-center retro-btn pr-6 py-5 md:pr-8 md:py-6 uppercase transition-all ${answers[currentIndex] === null ? 'bg-[var(--color-primary)] text-[var(--color-bg-dark)]' : ''}`}>
+                    <span className="opacity-0 select-none font-bold text-xl md:text-3xl mr-4 md:mr-6 shrink-0">{'>'}</span>
+                    <div className="flex items-start flex-1">
+                      <span className={`mr-3 shrink-0 text-left font-bold ${answers[currentIndex] === null ? 'text-[var(--color-bg-dark)]' : 'text-[var(--color-accent-cyan)] glow-text-cyan'}`}>[SKIP]</span>
+                      <span className="text-left flex-1 leading-relaxed">跳过此题目</span>
+                    </div>
+                  </button>
                 </div>
               </div>
             </div>
