@@ -129,7 +129,7 @@ export default function Home({ onStart }) {
           </button>
 
           <p className="text-[var(--color-text-muted)] text-xs mt-2">
-            V1.0.0 | 结果不上传 | WUTONK@2026
+            无需全部作答 | 结果不上传 | WUTONK@2026
           </p>
         </div>
       </div>
