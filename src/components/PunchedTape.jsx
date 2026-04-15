@@ -239,7 +239,7 @@ export default function PunchedTape({ currentIndex, answers, totalQuestions, onJ
 
             {/* 顶部印刷文字 */}
             <div className="flex justify-between text-[11px] font-bold mb-3 tracking-widest uppercase opacity-80 pl-2">
-              <span>{`HELLO, WORLD. THIS IS PROGRAMMER SBTI. AWAITING INPUT...`}</span>
+              <span>{`◀ 请将此向插入读取机`}</span>
               <span>CDL 0815</span>
             </div>
 
